@@ -15,18 +15,46 @@
 #>
 
 param(
-    [Parameter(Mandatory=$true,ParameterSetName="Release")]
-    [Parameter(Mandatory=$true,ParameterSetName="Debug")]
-    [ValidateSet("ISHServer.12","ISHServer.13")]
-    [string]$ModuleName,
-    [Parameter(Mandatory=$false,ParameterSetName="Release")]
-    [Parameter(Mandatory=$false,ParameterSetName="Debug")]
+    [Parameter(Mandatory=$false,ParameterSetName="KC2016")]
+    [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
     [string]$NuGetApiKey=$null,
-    [Parameter(Mandatory=$true,ParameterSetName="Debug")]
+    [Parameter(Mandatory=$false,ParameterSetName="KC2016")]
+    [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
     [ValidateScript({$_ -ne "PSGallery"})]
-    [string]$Repository
+    [string]$Repository=$null,
+    [Parameter(Mandatory=$true,ParameterSetName="KC2016")]
+    [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
+    [switch]$ISH12=$false,
+    [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
+    [switch]$ISH13=$false
 )
 
+$moduleNamesToPublish=@()
+switch ($PSCmdlet.ParameterSetName)
+{
+    'KC2016' {
+        if($Repository)
+        {
+            $publishDebug=$true
+        }
+        else
+        {
+            $publishDebug=$false
+            $Repository="PSGallery"
+        }
+        $moduleNamesToPublish+="ISHServer.12"
+        break;
+    }
+    'KC2016+Dev' {
+        $publishDebug=$true
+        if($ISH12)
+        {
+            $moduleNamesToPublish+="ISHServer.12"
+        }
+        $moduleNamesToPublish+="ISHServer.13"
+        break        
+    }
+}
 
 if((& "$PSScriptRoot\Test-All.ps1") -ne 0)
 {
@@ -34,173 +62,170 @@ if((& "$PSScriptRoot\Test-All.ps1") -ne 0)
     return
 }
 
-
-switch ($PSCmdlet.ParameterSetName)
+if($publishDebug)
 {
-    'Debug' {
-        $publishDebug=$true
-        break        
-    }
-    'Release' {
-        $publishDebug=$false
-        $Repository="PSGallery"
-    }
+    $revision=0
+    $date=(Get-Date).ToUniversalTime()
+    $build=[string](1200 * ($date.Year -2015)+$date.Month*100+$date.Day)
+    $build+=$date.ToString("HHmm")
+    $sourceVersion+=".$build.$revision"    
 }
 
-$progressActivity="Publish $moduleName"
 
-try
+
+foreach($moduleName in $moduleNamesToPublish)
 {
-    if(($Repository -eq "PSGallery") -and ($ModuleName -eq "ISHServer.13"))
+    try
     {
-        throw "Not allowed to publish $ModuleName to $Repository"
-    }
-    $tempWorkFolderPath=Join-Path $env:TEMP "$ModuleName-Publish"
-    if(Test-Path $tempWorkFolderPath)
-    {
-        Remove-Item -Path $tempWorkFolderPath -Recurse -Force
-    }
-    New-Item -Path $tempWorkFolderPath -ItemType Directory|Out-Null
-    Write-Verbose "Temporary working folder $tempWorkFolderPath is ready"
-
-    $modulePath=Join-Path $tempWorkFolderPath $ModuleName
-    New-Item -Path $modulePath -ItemType Directory|Out-Null
-    Write-Verbose "Temporary working folder $modulePath is ready"
-
-    Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*.*" -Destination $modulePath -Recurse
-    switch ($ModuleName)
-    {
-        'ISHServer.12' {
-            Remove-Item -Path "$modulePath\ISHServer.13.psm1" -Force
-        }
-        'ISHServer.13' {
-            Remove-Item -Path "$modulePath\ISHServer.12.psm1" -Force
-        }
-    }
-    $psm1Path=Join-Path $modulePath "$ModuleName.psm1"
-
-    $sourcePsm1Content=Get-Content -Path $psm1Path -Raw
-    $versionRegEx="\.VERSION (?<Major>([0-9]+))\.(?<Minor>([0-9]+))"
-    if($sourcePsm1Content -notmatch $versionRegEx)
-    {
-        Write-Error "$psm1Path doesn't contain script info .VERSION"
-        return -1
-    }
-    $sourceMajor=[int]$Matches["Major"]
-    $sourceMinor=[int]$Matches["Minor"]
-    $sourceVersion="$sourceMajor.$sourceMinor"
-    if($publishDebug)
-    {
-        $revision=0
-        $date=(Get-Date).ToUniversalTime()
-        $build=[string](1200 * ($date.Year -2015)+$date.Month*100+$date.Day)
-        $build+=$date.ToString("HHmm")
-        $sourceVersion+=".$build.$revision"    
-        Write-Warning "Increased module version with build number $sourceVersion"
-    }
-    Write-Debug "sourceMajor=$sourceMajor"
-    Write-Debug "sourceMinor=$sourceMinor"
-    Write-Debug "sourceVersion=$sourceVersion"
-
-    #region query
-    if(-not $publishDebug)
-    {
-        Write-Debug "Querying $ModuleName in Repository $Repository"
-        Write-Progress -Activity $progressActivity -Status "Querying..."
-        $repositoryModule=Find-Module -Name $ModuleName -Repository $Repository -ErrorAction SilentlyContinue
-        Write-Verbose "Queried $ModuleName in Repository $Repository"
-        $shouldTryPublish=$false
-
-        if((-not $publishDebug) -and $repositoryModule)
+        $progressActivity="Publish $moduleName"
+        Write-Progress -Activity $progressActivity
+        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.13"))
         {
-            $publishedVersion=$repositoryModule.Version
-            $publishedMajor=$publishedVersion.Major
-            $publishedMinor=$publishedVersion.Minor
+            throw "Not allowed to publish $moduleName to $Repository"
+        }
+        $tempWorkFolderPath=Join-Path $env:TEMP "$moduleName-Publish"
+        if(Test-Path $tempWorkFolderPath)
+        {
+            Remove-Item -Path $tempWorkFolderPath -Recurse -Force
+        }
+        New-Item -Path $tempWorkFolderPath -ItemType Directory|Out-Null
+        Write-Verbose "Temporary working folder $tempWorkFolderPath is ready"
 
-            Write-Verbose "Found existing published module with version $publishedVersion"
+        $modulePath=Join-Path $tempWorkFolderPath $moduleName
+        New-Item -Path $modulePath -ItemType Directory|Out-Null
+        Write-Verbose "Temporary working folder $modulePath is ready"
 
-            if(($sourceMajor -ne $publishedMajor) -or ($sourceMinor -ne $publishedMinor))
+        Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*.*" -Destination $modulePath -Recurse
+        switch ($moduleName)
+        {
+            'ISHServer.12' {
+                Remove-Item -Path "$modulePath\ISHServer.13.psm1" -Force
+            }
+            'ISHServer.13' {
+                Remove-Item -Path "$modulePath\ISHServer.12.psm1" -Force
+            }
+        }
+        $psm1Path=Join-Path $modulePath "$moduleName.psm1"
+        $metadataPath=Join-Path $modulePath "metadata.ps1"
+        $metadataContent=Get-Content -Path $metadataPath -Raw
+        $versionRegEx="\.VERSION (?<Major>([0-9]+))\.(?<Minor>([0-9]+))"
+        if($metadataContent -notmatch $versionRegEx)
+        {
+            Write-Error "$metadataPath doesn't contain script info .VERSION"
+            return -1
+        }
+        $sourceMajor=[int]$Matches["Major"]
+        $sourceMinor=[int]$Matches["Minor"]
+        $sourceVersion="$sourceMajor.$sourceMinor"
+        if($publishDebug)
+        {
+            $sourceVersion+=".$build.$revision"    
+            Write-Verbose "Increased $moduleName version with build number $sourceVersion"
+        }
+        Write-Debug "sourceMajor=$sourceMajor"
+        Write-Debug "sourceMinor=$sourceMinor"
+        Write-Debug "sourceVersion=$sourceVersion"
+
+        #region query
+        if(-not $publishDebug)
+        {
+            Write-Debug "Querying $moduleName in Repository $Repository"
+            Write-Progress -Activity $progressActivity -Status "Querying..."
+            $repositoryModule=Find-Module -Name $moduleName -Repository $Repository -ErrorAction SilentlyContinue
+            Write-Verbose "Queried $moduleName in Repository $Repository"
+            $shouldTryPublish=$false
+
+            if((-not $publishDebug) -and $repositoryModule)
             {
-                Write-Verbose "Source version $sourceMajor.$sourceMinor is different that published version $publishedVersion"
-                $shouldTryPublish=$true
+                $publishedVersion=$repositoryModule.Version
+                $publishedMajor=$publishedVersion.Major
+                $publishedMinor=$publishedVersion.Minor
+
+                Write-Verbose "Found existing published module with version $publishedVersion"
+
+                if(($sourceMajor -ne $publishedMajor) -or ($sourceMinor -ne $publishedMinor))
+                {
+                    Write-Verbose "Source version $sourceMajor.$sourceMinor is different that published version $publishedVersion"
+                    $shouldTryPublish=$true
+                }
+                else
+                {
+                    Write-Warning "Source version $sourceMajor.$sourceMinor is the same as with the already published. Will skip publishing"
+                }
             }
             else
             {
-                Write-Warning "Source version $sourceMajor.$sourceMinor is the same as with the already published. Will skip publishing"
+                Write-Verbose "Module is not yet published to the $Repository repository"
+                $shouldTryPublish=$true
             }
         }
         else
         {
-            Write-Verbose "Module is not yet published to the $Repository repository"
             $shouldTryPublish=$true
         }
-    }
-    else
-    {
-        $shouldTryPublish=$true
-    }
-    #endregion
+        #endregion
 
-    if($shouldTryPublish)
-    {
-        #region manifest
-        Write-Debug "Generating manifest"
+        if($shouldTryPublish)
+        {
+            #region manifest
+            Write-Debug "Generating manifest"
     
-        Import-Module $psm1Path -Force 
-        $exportedNames=Get-Command -Module $ModuleName | Select-Object -ExcludeProperty Name
+            Import-Module $psm1Path -Force 
+            $exportedNames=Get-Command -Module $moduleName | Select-Object -ExcludeProperty Name
 
-        $psm1Name=$ModuleName+".psm1"
-        $psd1Path=Join-Path $modulePath "$ModuleName.psd1"
-        $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
-        $hash=@{
-            "Author"="SDL plc"
-            "CompanyName" = "SDL plc"
-            "Copyright"="SDL plc. All rights reserved."
-            "RootModule"=$psm1Name
-            "Description"="Prerequisite automation module for SDL Knowledge Center Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
-            "ModuleVersion"=$sourceVersion
-            "Path"=$psd1Path
-            "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
-            "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
-            "ReleaseNotes"= 'https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md'
-            "CmdletsToExport" = $exportedNames
-            "FunctionsToExport" = $exportedNames
-        }
-        switch ($ModuleName)
-        {
-            'ISHServer.12' {
-                $hash.Description="Prerequisite automation module for SDL Knowledge Center 2016 Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
-                $hash.Guid="469894fc-530e-47dd-9158-ed5148815712"
-                break
+            $psm1Name=$moduleName+".psm1"
+            $psd1Path=Join-Path $modulePath "$moduleName.psd1"
+            $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
+            $hash=@{
+                "Author"="SDL plc"
+                "CompanyName" = "SDL plc"
+                "Copyright"="SDL plc. All rights reserved."
+                "RootModule"=$psm1Name
+                "Description"="Prerequisite automation module for SDL Knowledge Center Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
+                "ModuleVersion"=$sourceVersion
+                "Path"=$psd1Path
+                "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
+                "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
+                "ReleaseNotes"= 'https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md'
+                "CmdletsToExport" = $exportedNames
+                "FunctionsToExport" = $exportedNames
             }
-            'ISHServer.13' {
-                $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 13.0.* (LiveContent Architect, Trisoft InfoShare)"
-                $hash.Guid="c73125ea-0914-4a1c-958b-05eccd6c2c29"
-                break
+            switch ($moduleName)
+            {
+                'ISHServer.12' {
+                    $hash.Description="Prerequisite automation module for SDL Knowledge Center 2016 Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
+                    $hash.Guid="469894fc-530e-47dd-9158-ed5148815712"
+                    break
+                }
+                'ISHServer.13' {
+                    $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 13.0.* (LiveContent Architect, Trisoft InfoShare)"
+                    $hash.Guid="c73125ea-0914-4a1c-958b-05eccd6c2c29"
+                    break
+                }
             }
-        }
 
-        New-ModuleManifest  @hash 
+            New-ModuleManifest  @hash 
 
-        Write-Verbose "Generated manifest"
-        #endregion
+            Write-Verbose "Generated manifest"
+            #endregion
 
-        #region publish
-        Write-Debug "Publishing $moduleName"
-        Write-Progress -Activity $progressActivity -Status "Publishing..."
-        if($NuGetApiKey)
-        {
-            Publish-Module -Repository $repository -Path $modulePath -NuGetApiKey $NuGetApiKey -Confirm:$false
+            #region publish
+            Write-Debug "Publishing $moduleName"
+            Write-Progress -Activity $progressActivity -Status "Publishing..."
+            if($NuGetApiKey)
+            {
+                Publish-Module -Repository $repository -Path $modulePath -NuGetApiKey $NuGetApiKey -Confirm:$false
+            }
+            else
+            {
+                Publish-Module -Repository $repository -Path $modulePath -NuGetApiKey "MockKey" -WhatIf -Confirm:$false
+            }
+            Write-Verbose "Published $moduleName"
+            #endregion
         }
-        else
-        {
-            Publish-Module -Repository $repository -Path $modulePath -NuGetApiKey "MockKey" -WhatIf -Confirm:$false
-        }
-        Write-Verbose "Published $moduleName"
-        #endregion
     }
-}
-finally
-{
-    Write-Progress -Activity $progressActivity -Completed
+    finally
+    {
+        Write-Progress -Activity $progressActivity -Completed
+    }
 }
