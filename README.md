@@ -3,9 +3,9 @@ A PowerShell module to help automate installation of prerequisites for **Knowled
 
 # ISHServer.12 
 
-**ISHServer.12** is the specific module matching the prerequisite requirements of the **Knowledge Center 2016** release. 
+[ISHServer.12**](https://www.powershellgallery.com/packages/ISHServer.12/) is the specific module matching the prerequisite requirements of the **Knowledge Center 2016** release. 
 
-The module requires a session with elevated privileges. 
+The module requires elevated privileges for most of its cmdlets. 
 
 ## Preparation 
 
