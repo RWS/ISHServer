@@ -18,10 +18,9 @@ param(
     [Parameter(Mandatory=$false,ParameterSetName="KC2016")]
     [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
     [string]$NuGetApiKey=$null,
-    [Parameter(Mandatory=$false,ParameterSetName="KC2016")]
     [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
     [ValidateScript({$_ -ne "PSGallery"})]
-    [string]$Repository=$null,
+    [string]$DevRepository,
     [Parameter(Mandatory=$true,ParameterSetName="KC2016")]
     [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
     [switch]$ISH12=$false,
@@ -33,20 +32,14 @@ $moduleNamesToPublish=@()
 switch ($PSCmdlet.ParameterSetName)
 {
     'KC2016' {
-        if($Repository)
-        {
-            $publishDebug=$true
-        }
-        else
-        {
-            $publishDebug=$false
-            $Repository="PSGallery"
-        }
+        $publishDebug=$false
+        $repository="PSGallery"
         $moduleNamesToPublish+="ISHServer.12"
         break;
     }
     'KC2016+Dev' {
         $publishDebug=$true
+        $repository=$DevRepository
         if($ISH12)
         {
             $moduleNamesToPublish+="ISHServer.12"
@@ -81,7 +74,7 @@ foreach($moduleName in $moduleNamesToPublish)
         Write-Progress -Activity $progressActivity
         if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.13"))
         {
-            throw "Not allowed to publish $moduleName to $Repository"
+            throw "Not allowed to publish $moduleName to $repository"
         }
         $tempWorkFolderPath=Join-Path $env:TEMP "$moduleName-Publish"
         if(Test-Path $tempWorkFolderPath)
@@ -129,10 +122,10 @@ foreach($moduleName in $moduleNamesToPublish)
         #region query
         if(-not $publishDebug)
         {
-            Write-Debug "Querying $moduleName in Repository $Repository"
+            Write-Debug "Querying $moduleName in Repository $repository"
             Write-Progress -Activity $progressActivity -Status "Querying..."
-            $repositoryModule=Find-Module -Name $moduleName -Repository $Repository -ErrorAction SilentlyContinue
-            Write-Verbose "Queried $moduleName in Repository $Repository"
+            $repositoryModule=Find-Module -Name $moduleName -Repository $repository -ErrorAction SilentlyContinue
+            Write-Verbose "Queried $moduleName in Repository $repository"
             $shouldTryPublish=$false
 
             if((-not $publishDebug) -and $repositoryModule)
@@ -155,7 +148,7 @@ foreach($moduleName in $moduleNamesToPublish)
             }
             else
             {
-                Write-Verbose "Module is not yet published to the $Repository repository"
+                Write-Verbose "Module is not yet published to the $repository repository"
                 $shouldTryPublish=$true
             }
         }
