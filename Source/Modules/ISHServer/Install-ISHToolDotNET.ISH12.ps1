@@ -16,6 +16,21 @@
 
 function Install-ISHToolDotNET 
 {
-    $osInfo=Get-ISHOSInfo
-    Write-Verbose "Assuming .NET 4.5 is installed on $($osInfo.Caption)"
+    [CmdletBinding()]
+    Param()
+    
+    begin 
+    {
+        . $PSScriptRoot\Get-ISHOSInfo.ps1
+    }
+
+    process
+    {
+        $osInfo=Get-ISHOSInfo
+        Write-Verbose "Assuming .NET 4.5 is installed on $($osInfo.Caption)"
+    }
+    end
+    {
+
+    }
 }

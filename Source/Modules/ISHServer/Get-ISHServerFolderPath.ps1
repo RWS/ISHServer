@@ -16,22 +16,38 @@
 
 function Get-ISHServerFolderPath
 {
+    [CmdletBinding()]
     param (
         [Parameter(Mandatory=$false)]
         [switch]$UNC=$false
     )
-    $moduleName=$($MyInvocation.MyCommand.Module)
-    $programDataPath=Join-Path $env:ProgramData $moduleName
-    if(-not (Test-Path $programDataPath))
+
+    begin 
     {
-        New-Item $programDataPath -ItemType Directory |Out-Null
+        . $PSScriptRoot\Test-RunningAsElevated.ps1
+        Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
     }
-    if($UNC)
+
+    process
     {
-        return "\\"+$env:COMPUTERNAME+"\"+$programDataPath.Replace($env:SystemDrive,$env:SystemDrive.Replace(":","$"))
+        $moduleName=$($MyInvocation.MyCommand.Module)
+        $programDataPath=Join-Path $env:ProgramData $moduleName
+        if(-not (Test-Path $programDataPath))
+        {
+            New-Item $programDataPath -ItemType Directory |Out-Null
+        }
+        if($UNC)
+        {
+            return "\\"+$env:COMPUTERNAME+"\"+$programDataPath.Replace($env:SystemDrive,$env:SystemDrive.Replace(":","$"))
+        }
+        else
+        {
+            return $programDataPath
+        }
     }
-    else
+
+    end
     {
-        return $programDataPath
+
     }
 }
