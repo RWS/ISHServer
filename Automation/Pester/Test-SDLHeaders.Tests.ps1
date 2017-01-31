@@ -16,7 +16,7 @@
 
 $sourcePath=Resolve-Path "$PSScriptRoot\..\.."
 
-Import-Module "$sourcePath\Tools\Modules\SDLDevTools\0.1\SDLDevTools.psm1" -Force
+Import-Module "$sourcePath\Tools\Modules\SDLDevTools" -Force
 
 # Must convert to array of hash to drive the It -Testcases parameter
 $filesToValidate=@()
