@@ -71,7 +71,7 @@ function Get-ISHCD
                 $newItem=Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $localPath
                 if($Expand)
                 {
-                    . $PSScriptRoot\Private\Expand-ISHCD.ps1
+                    . $PSScriptRoot\Expand-ISHCD.ps1
                     Expand-ISHCD -FileName $newItem.Name
                 }
                 break        
@@ -92,7 +92,7 @@ function Get-ISHCD
                 $newItem=Get-ISHS3Object -Key $Key @hash
                 if($Expand)
                 {
-                    . $PSScriptRoot\Private\Expand-ISHCD.ps1
+                    . $PSScriptRoot\Expand-ISHCD.ps1
                     Expand-ISHCD -FileName $newItem.Name
                 }
                 break        
@@ -120,7 +120,15 @@ function Get-ISHCD
 
                     $availableItems+=New-Object -TypeName PSObject -Property $hash
                 }
-                Get-ChildItem -Path $ishCDPath -Recurse -Directory -Depth 1 |Where-Object -Property Name -Match ($regEx.Replace("\.exe","")) | ForEach-Object {
+                if($PSVersionTable.PSVersion.Major -ge 5)
+                {
+                    $childItems=Get-ChildItem -Path $ishCDPath -Recurse -Directory -Depth 1
+                }
+                else
+                {
+                    $childItems=Get-ChildItem -Path $ishCDPath -Recurse -Directory
+                }
+                $childItems |Where-Object -Property Name -Match ($regEx.Replace("\.exe","")) | ForEach-Object {
                     $directoryName=$_.Name
                     if($availableItems |Where-Object {
                         ($_.Name.Replace(".exe","") -eq $directoryName) -or ($_.Name.Replace(".exe","").Replace(".Test","") -eq $directoryName)

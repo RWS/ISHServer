@@ -27,11 +27,8 @@ function Expand-ISHCD
     
     begin 
     {
-        if($PSCmdlet.ParameterSetName -ne "No Download")
-        {
-            . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
-            Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
-        }
+        . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
+        Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
 
         . $PSScriptRoot\Get-ISHServerFolderPath.ps1
         . $PSScriptRoot\Get-ISHCD.ps1
