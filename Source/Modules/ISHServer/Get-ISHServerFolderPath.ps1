@@ -24,13 +24,18 @@ function Get-ISHServerFolderPath
 
     begin 
     {
-        . $PSScriptRoot\Test-RunningAsElevated.ps1
+        . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
         Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
     }
 
     process
     {
         $moduleName=$($MyInvocation.MyCommand.Module)
+        if(-not $moduleName)
+        {
+            $moduleName="ISHServer.Debug"
+            Write-Warning "Executed the cmdlet directly. Setting module name to $moduleName"
+        }
         $programDataPath=Join-Path $env:ProgramData $moduleName
         if(-not (Test-Path $programDataPath))
         {
