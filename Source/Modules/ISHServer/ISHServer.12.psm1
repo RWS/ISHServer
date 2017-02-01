@@ -66,6 +66,11 @@ $exportNames=@(
     #region License
     "Set-ISHToolAntennaHouseLicense"
     #endregion
+	
+	#region CD
+    "Expand-ISHCD"
+    "Get-ISHCD"
+	#endregion
 )
 
 $privateNames=@(
