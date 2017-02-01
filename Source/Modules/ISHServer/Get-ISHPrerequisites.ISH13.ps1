@@ -109,7 +109,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $paths+="$FTPFolder$_"
                 }
-                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $paths -LocalPath $localPath
+                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $paths -LocalPath $localPath | Out-Null
                 break        
             }
             'From AWS S3' {
@@ -130,7 +130,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $keys+="$FolderKey$_"
                 }
-                Get-ISHS3Object -Key $keys @hash
+                Get-ISHS3Object -Key $keys @hash | Out-Null
                 break        
             }
             'No Download' {

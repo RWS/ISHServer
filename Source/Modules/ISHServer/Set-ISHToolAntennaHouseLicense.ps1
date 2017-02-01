@@ -77,7 +77,7 @@ function Set-ISHToolAntennaHouseLicense
         switch ($PSCmdlet.ParameterSetName)
         {
             'From FTP' {
-                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $antennaHouseFolderPath
+                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $antennaHouseFolderPath | Out-Null
                 break        
             }
             'From AWS S3' {
@@ -93,7 +93,7 @@ function Set-ISHToolAntennaHouseLicense
                     SessionToken=$SessionToken
                 }
 
-                Get-ISHS3Object -Key $Key @hash
+                Get-ISHS3Object -Key $Key @hash | Out-Null
                 break        
             }
             'Content' {
