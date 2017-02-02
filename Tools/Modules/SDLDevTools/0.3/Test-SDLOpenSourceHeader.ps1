@@ -50,11 +50,10 @@ Function Test-SDLOpenSourceHeader {
                     {
                         return
                     }
-                    $ExcludeFolder | ForEach-Object {
-                        if($fullName -like "*\$_\*")
-                        {
-                            return
-                        }
+                    if($ExcludeFolder | Where-Object {
+                        $fullName -like "*\$_\*"
+                    }){
+                        return
                     }
                     Test-SDLOpenSourceHeader -FilePath ($_.FullName) -PassThru:$PassThru -ExpandError:$ExpandError
                 }
