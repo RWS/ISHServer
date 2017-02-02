@@ -45,13 +45,13 @@ function Get-ISHCD
         [Parameter(Mandatory=$false,ParameterSetName="From FTP")]
         [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
         [switch]$Expand=$false,
-        [Parameter(Mandatory=$true,ParameterSetName="No Download")]
+        [Parameter(Mandatory=$true,ParameterSetName="List")]
         [switch]$ListAvailable
     )
     
     begin 
     {
-        if($PSCmdlet.ParameterSetName -ne "No Download")
+        if($PSCmdlet.ParameterSetName -ne "List")
         {
             . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
             Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
@@ -97,8 +97,12 @@ function Get-ISHCD
                 }
                 break        
             }
-            'No Download' {
-                $regEx=".+\.(?<Major>[0-9]+)\.0\.(?<Build>[0-9]+)\.(?<Revision>[0-9]+)(\.Test)*.+\.exe"
+            'List' {
+                function RemoveSDLSegments([string]$path)
+                {
+                    return $path.Replace(".Test","").Replace(".Prod","")
+                }
+                $regEx=".+\.(?<Major>[0-9]+)\.0\.(?<Build>[0-9]+)\.(?<Revision>[0-9]+)(\.Test)*(\.Prod)*.+\.exe"
                 $availableItems=@()
                 $ishCDPath="C:\IshCD"
                 Get-ChildItem -Path $localPath -File |Where-Object -Property Name -Match $regEx|ForEach-Object {
@@ -109,6 +113,7 @@ function Get-ISHCD
                         Build=[int]$Matches["Build"]
                         Revision=[int]$Matches["Revision"]
                         IsExpanded=$false
+                        ExpandedPath=$null
                     }
 
                     $ishVersion="$($hash.Major).0.$($hash.Revision)"
@@ -116,22 +121,33 @@ function Get-ISHCD
                     $expandPath="$ishCDPath\$ishVersion"
                     Write-Debug "expandPath=$expandPath"
                     $testPath=Join-Path -Path $expandPath -ChildPath ($_.Name.Replace(".exe",""))
-                    $hash.IsExpanded=(Test-Path $testPath -PathType Container) -or (Test-Path $testPath.Replace(".Test","") -PathType Container)
-
+                    $testPath=RemoveSDLSegments($testPath)
+                    $hash.IsExpanded=Test-Path $testPath -PathType Container
+                    if($hash.IsExpanded)
+                    {
+                        $hash.ExpandedPath=$testPath
+                    }
                     $availableItems+=New-Object -TypeName PSObject -Property $hash
                 }
-                if($PSVersionTable.PSVersion.Major -ge 5)
+                if(Test-Path -Path $ishCDPath -PathType Container)
                 {
-                    $childItems=Get-ChildItem -Path $ishCDPath -Recurse -Directory -Depth 1
+                    if($PSVersionTable.PSVersion.Major -ge 5)
+                    {
+                        $childItems=Get-ChildItem -Path $ishCDPath -Recurse -Directory -Depth 1
+                    }
+                    else
+                    {
+                        $childItems=Get-ChildItem -Path $ishCDPath -Recurse -Directory
+                    }
                 }
                 else
                 {
-                    $childItems=Get-ChildItem -Path $ishCDPath -Recurse -Directory
+                    $childItems=$null
                 }
                 $childItems |Where-Object -Property Name -Match ($regEx.Replace("\.exe","")) | ForEach-Object {
                     $directoryName=$_.Name
                     if($availableItems |Where-Object {
-                        ($_.Name.Replace(".exe","") -eq $directoryName) -or ($_.Name.Replace(".exe","").Replace(".Test","") -eq $directoryName)
+                        ((RemoveSDLSegments($_.Name).Replace(".exe","")) -eq $directoryName)
                     })
                     {
                         return
@@ -143,6 +159,7 @@ function Get-ISHCD
                         Build=[int]$Matches["Build"]
                         Revision=[int]$Matches["Revision"]
                         IsExpanded=$true
+                        ExpandedPath=$_.FullName
                     }
                     $availableItems+=New-Object -TypeName PSObject -Property $hash
                 }

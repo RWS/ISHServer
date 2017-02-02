@@ -7,6 +7,15 @@ A PowerShell module to help automate installation of prerequisites for **Knowled
 
 The module requires elevated privileges for most of its cmdlets. 
 
+## Prerequisite and CD sources
+
+The module can retrieve files from the following type of sources:
+
+- FTP.
+- Amazon Web Services S3 bucket.
+
+For each different type of credentials are required.
+
 ## Preparation 
 
 To test if the operating system is compatible execute first `Test-ISHServerCompliance`. 
@@ -38,10 +47,7 @@ NETFramework2013_4.5_MicrosoftVisualC++Redistributable_(vcredist_x64).exe
 ```
 
 If you want to manually make the files available to the module then copy them to the location provided by `Get-ISHServerFolderPath`. 
-As an alternative, the `Get-ISHPrerequisites` cmdlet offers the option to download the files from a known location and will take care of everything. 
-Current options are:
-
-- FTP. Just provide the ftp hostname, a relative folder path containing the above files and the credentials. e.g. `Get-ISHPrerequisites -Credential $Credential -FTPFolder $folderPath -FTPHost $host`.
+As an alternative, the `Get-ISHPrerequisites` cmdlet offers the option to download the files will take care of everything. 
 
 ## Installing and configuring
 
@@ -49,6 +55,16 @@ Once the files are available on the server, you can start the installation of th
 The module is structured in manner that represents the steps described in the product's [documentation](http://docs.sdl.com/LiveContent/web/pub.xql?action=home&pub=SDL%20Knowledge%20Center%20full%20documentation-v2.1.2&lang=en-US). 
 Understanding the prerequisites and how to configure them will be helpful but it is not a requirement.
 An example of how to use the sequence the installation and configuration is available in [ISHBootstrap](https://github.com/Sarafian/ISHBootstrap).
+
+## CD Management
+
+ISHServer offers two cmdlets to download and expand the ISHCD. **Notice that it will not install a CD!**
+- `Get-ISHCD` can download a CD or show the ones already downloaded and expanded.
+- `Expand-ISHCD` will expand the CD.
+
+The target path is always `C:\ISHCD\X.0.Z` where `X` is the major version and `Y` the revision. 
+- For `12.0.1` it's `C:\ISHCD\12.0.1`
+- For `12.0.3` it's `C:\ISHCD\12.0.3`
 
 ## Maintenance
 
