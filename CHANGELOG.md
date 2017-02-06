@@ -1,3 +1,14 @@
+**1.1**
+
+- Upgraded the SDLDevTools PowerShell module to version 0.2
+- `Get-ISHPrerequisites` now supports S3 buckets as source.
+- `Set-ISHToolAntennaHouseLicense` now supports S3 buckets as source.
+- `Test-RunningAsElevated` is now a private function in the module.
+- New `Get-ISHCD` cmdlet:
+  - Downloads a CD from FTP or AWS S3 bucket.
+  - Returns the available CDs
+- New `Expand-ISHCD` cmdlet expands a CD into `C:\ISHCD`.
+
 **1.0**
 
 - Split from [ISHBootstrap](https://github.com/Sarafian/ISHBootstrap).

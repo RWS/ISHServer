@@ -14,23 +14,28 @@
 # limitations under the License.
 #>
 
-$sourcePath=Resolve-Path "$PSScriptRoot\..\.."
+$repositoryPath=Resolve-Path "$PSScriptRoot\..\.."
+$modulePath=Resolve-Path "$repositoryPath\Tools\Modules"
 
-Import-Module "$sourcePath\Tools\Modules\SDLDevTools\0.1\SDLDevTools.psm1" -Force
+Import-Module "$modulePath\SDLDevTools" -Force
 
-# Must convert to array of hash to drive the It -Testcases parameter
-$filesToValidate=@()
-Get-ChildItem -Path $sourcePath -Recurse -File -Exclude ".git" |Select-Object Name,FullName|ForEach-Object {
-    $hash=@{
-        Name=$_.Name
-        FullName=$_.FullName
-    }
-    $filesToValidate+=$hash
+$reportToValidate=@()
+Test-SDLOpenSourceHeader -ExcludeFolder ".git" -FolderPath $repositoryPath -PassThru | ForEach-Object {
+    $hash=@{}
+    $hash.FilePath=$_.FilePath
+    $hash.Format=$_.Format
+    $hash.Error=$_.Error
+    $hash.IsValid=$_.IsValid
+
+    $reportToValidate+=$hash
 }
-
 Describe "Verify open source headers" {
-    It "Test-SDLOpenSourceHeader <Name>" -TestCases $filesToValidate {
-        param ($Name,$FullName)
-        Test-SDLOpenSourceHeader -FilePath $FullName
+    It "Test-SDLOpenSourceHeader <FilePath>" -TestCases $reportToValidate {
+        param ($FilePath,$Format,$Error,$IsValid)
+        if(-not $IsValid)
+        {
+            Write-Warning "$Error in $FilePath"
+        }
+        $IsValid | Should BeExactly $true
     }
 }

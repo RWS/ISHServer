@@ -24,6 +24,22 @@ function Get-ISHPrerequisites
         [pscredential]$Credential,
         [Parameter(Mandatory=$true,ParameterSetName="From FTP")]
         [string]$FTPFolder,
+        [Parameter(Mandatory=$true,ParameterSetName="From AWS S3")]
+        [string]$BucketName,
+        [Parameter(Mandatory=$true,ParameterSetName="From AWS S3")]
+        [string]$FolderKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$AccessKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$ProfileName,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$ProfileLocation,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$Region,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$SecretKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$SessionToken,
         [Parameter(Mandatory=$true,ParameterSetName="No Download")]
         [switch]$FileNames
     )
@@ -32,12 +48,21 @@ function Get-ISHPrerequisites
     {
         if($PSCmdlet.ParameterSetName -ne "No Download")
         {
-            . $PSScriptRoot\Test-RunningAsElevated.ps1
+            . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
             Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
         }
 
         . $PSScriptRoot\Get-ISHServerFolderPath.ps1
         . $PSScriptRoot\Get-ISHOSInfo.ps1
+
+        if(-not ($FTPFolder.EndsWith("/")))
+        {
+            $FTPFolder+="/"
+        }
+        if(-not ($FolderKey.EndsWith("/")))
+        {
+            $FolderKey+="/"
+        }
     }
 
     process
@@ -77,16 +102,35 @@ function Get-ISHPrerequisites
         switch ($PSCmdlet.ParameterSetName)
         {
             'From FTP' {
-                Import-Module PSFTP -ErrorAction Stop
-                $localPath=Get-ISHServerFolderPath
-                Set-FTPConnection -Server $FTPHost -Credentials $Credential -UseBinary -KeepAlive -UsePassive | Out-Null
-                $filesToDownload | ForEach-Object {
-                    $ftpUrl="$FTPFolder$_"
+                . $PSScriptRoot\Private\Get-ISHFTPItem.ps1
 
-                    Write-Debug "ftpUrl=$ftpUrl"
-                    Get-FTPItem -Path $ftpUrl -LocalPath $localPath -Overwrite | Out-Null
-                    Write-Verbose "Downloaded $ftpUrl"
+                $localPath=Get-ISHServerFolderPath
+                $paths=@()
+                $filesToDownload | ForEach-Object {
+                    $paths+="$FTPFolder$_"
                 }
+                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $paths -LocalPath $localPath | Out-Null
+                break        
+            }
+            'From AWS S3' {
+                . $PSScriptRoot\Private\Get-ISHS3Object.ps1
+        
+                $localPath=Get-ISHServerFolderPath
+                $hash=@{
+                    BucketName=$BucketName
+                    LocalFolder=$localPath
+                    AccessKey=$AccessKey
+                    ProfileName=$ProfileName
+                    ProfileLocation=$ProfileLocation
+                    Region=$Region
+                    SecretKey=$SecretKey
+                    SessionToken=$SessionToken
+                }
+                $keys=@()
+                $filesToDownload | ForEach-Object {
+                    $keys+="$FolderKey$_"
+                }
+                Get-ISHS3Object -Key $keys @hash | Out-Null
                 break        
             }
             'No Download' {

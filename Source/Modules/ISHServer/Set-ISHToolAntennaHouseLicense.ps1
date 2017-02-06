@@ -25,13 +25,30 @@ function Set-ISHToolAntennaHouseLicense
         [Parameter(Mandatory=$true,ParameterSetName="From FTP")]
         [ValidatePattern(".*AHFormatter\.lic")]
         [string]$FTPPath,
+        [Parameter(Mandatory=$true,ParameterSetName="From AWS S3")]
+        [string]$BucketName,
+        [Parameter(Mandatory=$true,ParameterSetName="From AWS S3")]
+        [ValidatePattern(".*AHFormatter\.lic")]
+        [string]$Key,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$AccessKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$ProfileName,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$ProfileLocation,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$Region,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$SecretKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [string]$SessionToken,
         [Parameter(Mandatory=$true,ParameterSetName="Content")]
         $Content
     )
     
     begin 
     {
-		. $PSScriptRoot\Test-RunningAsElevated.ps1
+		. $PSScriptRoot\Private\Test-RunningAsElevated.ps1
 		Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
 
 		. $PSScriptRoot\Get-ISHServerFolderPath.ps1
@@ -60,11 +77,23 @@ function Set-ISHToolAntennaHouseLicense
         switch ($PSCmdlet.ParameterSetName)
         {
             'From FTP' {
-                Import-Module PSFTP -ErrorAction Stop
-                Set-FTPConnection -Server $FTPHost -Credentials $Credential -UseBinary -KeepAlive -UsePassive | Out-Null
-                Write-Debug "FTPPath=$FTPPath"
-                Get-FTPItem -Path $FTPPath -LocalPath $antennaHouseFolderPath -Overwrite | Out-Null
-                Write-Verbose "Downloaded $ftpUrl"
+                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $antennaHouseFolderPath | Out-Null
+                break        
+            }
+            'From AWS S3' {
+                . $PSScriptRoot\Private\Get-ISHS3Object.ps1        
+                $hash=@{
+                    BucketName=$BucketName
+                    LocalFolder=$antennaHouseFolderPath
+                    AccessKey=$AccessKey
+                    ProfileName=$ProfileName
+                    ProfileLocation=$ProfileLocation
+                    Region=$Region
+                    SecretKey=$SecretKey
+                    SessionToken=$SessionToken
+                }
+
+                Get-ISHS3Object -Key $Key @hash | Out-Null
                 break        
             }
             'Content' {

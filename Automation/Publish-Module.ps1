@@ -20,13 +20,16 @@ param(
     [string]$NuGetApiKey=$null,
     [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
     [ValidateScript({$_ -ne "PSGallery"})]
-    [string]$DevRepository,
+    [string]$DevRepository #,
+    <#
     [Parameter(Mandatory=$true,ParameterSetName="KC2016")]
     [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
     [switch]$ISH12=$false,
-    [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
+    [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
     [switch]$ISH13=$false
+    #>
 )
+Set-StrictMode -Version latest
 
 $moduleNamesToPublish=@()
 switch ($PSCmdlet.ParameterSetName)
@@ -40,10 +43,7 @@ switch ($PSCmdlet.ParameterSetName)
     'KC2016+Dev' {
         $publishDebug=$true
         $repository=$DevRepository
-        if($ISH12)
-        {
-            $moduleNamesToPublish+="ISHServer.12"
-        }
+        $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
         break        
     }
@@ -54,14 +54,14 @@ if((& "$PSScriptRoot\Test-All.ps1") -ne 0)
     Write-Warning "Tests failed. Stopping..."
     return
 }
-
+$changeLogPath="$PSScriptRoot\..\CHANGELOG.md"
+$changeLog=Get-Content -Path $changeLogPath
 if($publishDebug)
 {
     $revision=0
     $date=(Get-Date).ToUniversalTime()
     $build=[string](1200 * ($date.Year -2015)+$date.Month*100+$date.Day)
     $build+=$date.ToString("HHmm")
-    $sourceVersion+=".$build.$revision"    
 }
 
 
@@ -88,7 +88,7 @@ foreach($moduleName in $moduleNamesToPublish)
         New-Item -Path $modulePath -ItemType Directory|Out-Null
         Write-Verbose "Temporary working folder $modulePath is ready"
 
-        Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*.*" -Destination $modulePath -Recurse
+        Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*" -Destination $modulePath -Recurse
         switch ($moduleName)
         {
             'ISHServer.12' {
@@ -158,50 +158,74 @@ foreach($moduleName in $moduleNamesToPublish)
         }
         #endregion
 
+        #region manifest
+        Write-Debug "Generating manifest"
+    
+        Import-Module $psm1Path -Force 
+        $exportedNames=Get-Command -Module $moduleName | Select-Object -ExcludeProperty Name
+        $psm1Name=$moduleName+".psm1"
+        $psd1Path=Join-Path $modulePath "$moduleName.psd1"
+        $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
+        
+        $possition = "None"
+        $releaseNotes=foreach ($line in $changelogContent) {
+            if ($line.StartsWith("**")){
+                if($possition -eq "None"){
+                    $possition="This Version"
+                }
+                else
+                {
+                    $possition="Next Version"
+                }
+                continue
+            }
+            If($possition -eq "This Version"){
+                if($line)
+                {
+                    $line
+                }
+            }
+        }
+        $releaseNotes+=@(
+            ""
+            "https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md"
+        )
+
+        $hash=@{
+            "Author"="SDL plc"
+            "CompanyName" = "SDL plc"
+            "Copyright"="SDL plc. All rights reserved."
+            "RootModule"=$psm1Name
+            "Description"="Prerequisite automation module for SDL Knowledge Center Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
+            "ModuleVersion"=$sourceVersion
+            "Path"=$psd1Path
+            "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
+            "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
+            "ReleaseNotes"= $releaseNotes -join [System.Environment]::NewLine
+            "CmdletsToExport" = $exportedNames
+            "FunctionsToExport" = $exportedNames
+        }
+        switch ($moduleName)
+        {
+            'ISHServer.12' {
+                $hash.Description="Prerequisite automation module for SDL Knowledge Center 2016 Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="469894fc-530e-47dd-9158-ed5148815712"
+                break
+            }
+            'ISHServer.13' {
+                $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 13.0.* (LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="c73125ea-0914-4a1c-958b-05eccd6c2c29"
+                break
+            }
+        }
+
+        New-ModuleManifest  @hash 
+
+        Write-Verbose "Generated manifest"
+        #endregion
+
         if($shouldTryPublish)
         {
-            #region manifest
-            Write-Debug "Generating manifest"
-    
-            Import-Module $psm1Path -Force 
-            $exportedNames=Get-Command -Module $moduleName | Select-Object -ExcludeProperty Name
-
-            $psm1Name=$moduleName+".psm1"
-            $psd1Path=Join-Path $modulePath "$moduleName.psd1"
-            $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
-            $hash=@{
-                "Author"="SDL plc"
-                "CompanyName" = "SDL plc"
-                "Copyright"="SDL plc. All rights reserved."
-                "RootModule"=$psm1Name
-                "Description"="Prerequisite automation module for SDL Knowledge Center Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
-                "ModuleVersion"=$sourceVersion
-                "Path"=$psd1Path
-                "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
-                "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
-                "ReleaseNotes"= 'https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md'
-                "CmdletsToExport" = $exportedNames
-                "FunctionsToExport" = $exportedNames
-            }
-            switch ($moduleName)
-            {
-                'ISHServer.12' {
-                    $hash.Description="Prerequisite automation module for SDL Knowledge Center 2016 Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
-                    $hash.Guid="469894fc-530e-47dd-9158-ed5148815712"
-                    break
-                }
-                'ISHServer.13' {
-                    $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 13.0.* (LiveContent Architect, Trisoft InfoShare)"
-                    $hash.Guid="c73125ea-0914-4a1c-958b-05eccd6c2c29"
-                    break
-                }
-            }
-
-            New-ModuleManifest  @hash 
-
-            Write-Verbose "Generated manifest"
-            #endregion
-
             #region publish
             Write-Debug "Publishing $moduleName"
             Write-Progress -Activity $progressActivity -Status "Publishing..."
