@@ -29,6 +29,8 @@ param(
     [switch]$ISH13=$false
     #>
 )
+Set-StrictMode -Version latest
+
 $moduleNamesToPublish=@()
 switch ($PSCmdlet.ParameterSetName)
 {
@@ -60,7 +62,6 @@ if($publishDebug)
     $date=(Get-Date).ToUniversalTime()
     $build=[string](1200 * ($date.Year -2015)+$date.Month*100+$date.Day)
     $build+=$date.ToString("HHmm")
-    $sourceVersion+=".$build.$revision"    
 }
 
 
@@ -200,7 +201,7 @@ foreach($moduleName in $moduleNamesToPublish)
             "Path"=$psd1Path
             "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
             "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
-            "ReleaseNotes"= $releaseNotes
+            "ReleaseNotes"= $releaseNotes -join [System.Environment]::NewLine
             "CmdletsToExport" = $exportedNames
             "FunctionsToExport" = $exportedNames
         }
