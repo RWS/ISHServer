@@ -29,6 +29,8 @@ param(
     [switch]$ISH13=$false
     #>
 )
+Set-StrictMode -Version latest
+
 $moduleNamesToPublish=@()
 switch ($PSCmdlet.ParameterSetName)
 {
@@ -52,14 +54,14 @@ if((& "$PSScriptRoot\Test-All.ps1") -ne 0)
     Write-Warning "Tests failed. Stopping..."
     return
 }
-
+$changeLogPath="$PSScriptRoot\..\CHANGELOG.md"
+$changeLog=Get-Content -Path $changeLogPath
 if($publishDebug)
 {
     $revision=0
     $date=(Get-Date).ToUniversalTime()
     $build=[string](1200 * ($date.Year -2015)+$date.Month*100+$date.Day)
     $build+=$date.ToString("HHmm")
-    $sourceVersion+=".$build.$revision"    
 }
 
 
@@ -164,6 +166,31 @@ foreach($moduleName in $moduleNamesToPublish)
         $psm1Name=$moduleName+".psm1"
         $psd1Path=Join-Path $modulePath "$moduleName.psd1"
         $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
+        
+        $possition = "None"
+        $releaseNotes=foreach ($line in $changelogContent) {
+            if ($line.StartsWith("**")){
+                if($possition -eq "None"){
+                    $possition="This Version"
+                }
+                else
+                {
+                    $possition="Next Version"
+                }
+                continue
+            }
+            If($possition -eq "This Version"){
+                if($line)
+                {
+                    $line
+                }
+            }
+        }
+        $releaseNotes+=@(
+            ""
+            "https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md"
+        )
+
         $hash=@{
             "Author"="SDL plc"
             "CompanyName" = "SDL plc"
@@ -174,7 +201,7 @@ foreach($moduleName in $moduleNamesToPublish)
             "Path"=$psd1Path
             "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
             "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
-            "ReleaseNotes"= 'https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md'
+            "ReleaseNotes"= $releaseNotes -join [System.Environment]::NewLine
             "CmdletsToExport" = $exportedNames
             "FunctionsToExport" = $exportedNames
         }
