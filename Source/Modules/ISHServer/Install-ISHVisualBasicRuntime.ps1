@@ -21,7 +21,7 @@ function Install-ISHVisualBasicRuntime
     
     begin 
     {
-        . $PSScriptRoot\Test-RunningAsElevated.ps1
+        . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
         Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
 
         . $PSScriptRoot\Get-ISHServerFolderPath.ps1

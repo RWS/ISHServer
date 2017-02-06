@@ -20,12 +20,14 @@ param(
     [string]$NuGetApiKey=$null,
     [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
     [ValidateScript({$_ -ne "PSGallery"})]
-    [string]$DevRepository,
+    [string]$DevRepository #,
+    <#
     [Parameter(Mandatory=$true,ParameterSetName="KC2016")]
     [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
     [switch]$ISH12=$false,
-    [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
+    [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
     [switch]$ISH13=$false
+    #>
 )
 
 $moduleNamesToPublish=@()
@@ -40,10 +42,7 @@ switch ($PSCmdlet.ParameterSetName)
     'KC2016+Dev' {
         $publishDebug=$true
         $repository=$DevRepository
-        if($ISH12)
-        {
-            $moduleNamesToPublish+="ISHServer.12"
-        }
+        $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
         break        
     }
@@ -88,7 +87,7 @@ foreach($moduleName in $moduleNamesToPublish)
         New-Item -Path $modulePath -ItemType Directory|Out-Null
         Write-Verbose "Temporary working folder $modulePath is ready"
 
-        Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*.*" -Destination $modulePath -Recurse
+        Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*" -Destination $modulePath -Recurse
         switch ($moduleName)
         {
             'ISHServer.12' {

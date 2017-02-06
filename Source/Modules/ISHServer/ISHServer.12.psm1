@@ -14,7 +14,7 @@
 # limitations under the License.
 #>
 
-$importNames=@(
+$exportNames=@(
     #region Helpers
     "Get-ISHOSInfo"
     "Get-ISHNETInfo"
@@ -68,7 +68,14 @@ $importNames=@(
     #endregion
 )
 
-$importNames | ForEach-Object {. $PSScriptRoot\$_.ps1 }
+$privateNames=@(
+    "Get-ISHFTPItem"
+    "Get-ISHS3Object"
+    "Test-RunningAsElevated"
+)
 
-$exportedMemberNames=$importNames -replace "\.ISH[0-9]+",""
+$privateNames | ForEach-Object {. $PSScriptRoot\Private\$_.ps1 }
+$exportNames | ForEach-Object {. $PSScriptRoot\$_.ps1 }
+
+$exportedMemberNames=$exportNames -replace "\.ISH[0-9]+",""
 Export-ModuleMember $exportedMemberNames
