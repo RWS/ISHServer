@@ -71,7 +71,7 @@ function Get-ISHS3Object
             $localFile=Join-Path $LocalFolder ($_.Substring($_.LastIndexOf('/')+1))
             Write-Debug "key=$_"
             Write-Debug "localFile=$localFile"
-            Copy-S3Object -Key $_ -LocalFile $localFile @hash |Out-Null
+            Copy-S3Object -Key $_ -LocalFile $localFile @hash
             Write-Verbose "Downloaded $_ to $localFile"
         }
     }

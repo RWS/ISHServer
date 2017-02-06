@@ -38,8 +38,10 @@ function Get-ISHFTPItem
     {
         $Path | ForEach-Object {
             Write-Debug "Path=$_"
-            Get-FTPItem -Path $_ -LocalPath $LocalPath -Overwrite | Out-Null
+            Get-FTPItem -Path $_ -LocalPath $LocalPath -Overwrite
             Write-Verbose "Downloaded $_ to $LocalPath"
+            $filePath=Join-Path $LocalPath ($_.Substring($_.LastIndexOf('/')+1))
+            Get-Item -Path $filePath
         }
     }
 

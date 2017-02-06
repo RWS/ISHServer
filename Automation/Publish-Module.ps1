@@ -29,7 +29,6 @@ param(
     [switch]$ISH13=$false
     #>
 )
-
 $moduleNamesToPublish=@()
 switch ($PSCmdlet.ParameterSetName)
 {
@@ -157,50 +156,49 @@ foreach($moduleName in $moduleNamesToPublish)
         }
         #endregion
 
+        #region manifest
+        Write-Debug "Generating manifest"
+    
+        Import-Module $psm1Path -Force 
+        $exportedNames=Get-Command -Module $moduleName | Select-Object -ExcludeProperty Name
+        $psm1Name=$moduleName+".psm1"
+        $psd1Path=Join-Path $modulePath "$moduleName.psd1"
+        $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
+        $hash=@{
+            "Author"="SDL plc"
+            "CompanyName" = "SDL plc"
+            "Copyright"="SDL plc. All rights reserved."
+            "RootModule"=$psm1Name
+            "Description"="Prerequisite automation module for SDL Knowledge Center Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
+            "ModuleVersion"=$sourceVersion
+            "Path"=$psd1Path
+            "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
+            "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
+            "ReleaseNotes"= 'https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md'
+            "CmdletsToExport" = $exportedNames
+            "FunctionsToExport" = $exportedNames
+        }
+        switch ($moduleName)
+        {
+            'ISHServer.12' {
+                $hash.Description="Prerequisite automation module for SDL Knowledge Center 2016 Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="469894fc-530e-47dd-9158-ed5148815712"
+                break
+            }
+            'ISHServer.13' {
+                $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 13.0.* (LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="c73125ea-0914-4a1c-958b-05eccd6c2c29"
+                break
+            }
+        }
+
+        New-ModuleManifest  @hash 
+
+        Write-Verbose "Generated manifest"
+        #endregion
+
         if($shouldTryPublish)
         {
-            #region manifest
-            Write-Debug "Generating manifest"
-    
-            Import-Module $psm1Path -Force 
-            $exportedNames=Get-Command -Module $moduleName | Select-Object -ExcludeProperty Name
-
-            $psm1Name=$moduleName+".psm1"
-            $psd1Path=Join-Path $modulePath "$moduleName.psd1"
-            $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
-            $hash=@{
-                "Author"="SDL plc"
-                "CompanyName" = "SDL plc"
-                "Copyright"="SDL plc. All rights reserved."
-                "RootModule"=$psm1Name
-                "Description"="Prerequisite automation module for SDL Knowledge Center Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
-                "ModuleVersion"=$sourceVersion
-                "Path"=$psd1Path
-                "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
-                "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
-                "ReleaseNotes"= 'https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md'
-                "CmdletsToExport" = $exportedNames
-                "FunctionsToExport" = $exportedNames
-            }
-            switch ($moduleName)
-            {
-                'ISHServer.12' {
-                    $hash.Description="Prerequisite automation module for SDL Knowledge Center 2016 Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
-                    $hash.Guid="469894fc-530e-47dd-9158-ed5148815712"
-                    break
-                }
-                'ISHServer.13' {
-                    $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 13.0.* (LiveContent Architect, Trisoft InfoShare)"
-                    $hash.Guid="c73125ea-0914-4a1c-958b-05eccd6c2c29"
-                    break
-                }
-            }
-
-            New-ModuleManifest  @hash 
-
-            Write-Verbose "Generated manifest"
-            #endregion
-
             #region publish
             Write-Debug "Publishing $moduleName"
             Write-Progress -Activity $progressActivity -Status "Publishing..."
