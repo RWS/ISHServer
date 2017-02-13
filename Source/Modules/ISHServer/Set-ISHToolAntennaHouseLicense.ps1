@@ -42,6 +42,23 @@ function Set-ISHToolAntennaHouseLicense
         [string]$SecretKey,
         [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
         [string]$SessionToken,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [string]$ShareName,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
+        [string]$ContainerName,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
+        [ValidatePattern(".*AHFormatter\.lic")]
+        [string]$Path,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
+        [string]$StorageAccountName,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
+        [string]$StorageAccountKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
+        [Object]$Context,
         [Parameter(Mandatory=$true,ParameterSetName="Content")]
         $Content
     )
@@ -94,6 +111,32 @@ function Set-ISHToolAntennaHouseLicense
                 }
 
                 Get-ISHS3Object -Key $Key @hash | Out-Null
+                break        
+            }
+            'From Azure FileStorage' {
+                . $PSScriptRoot\Private\Get-ISHAzureFileObject.ps1
+                $hash=@{
+                    ShareName=$ShareName
+                    LocalFolder=$localPath
+                    StorageAccountName=$StorageAccountName
+                    StorageAccountKey=$StorageAccountKey
+                    Context=$Context
+                }
+
+                Get-ISHAzureFileObject -Path $Path @hash | Out-Null
+                break        
+            }
+            'From Azure BlobStorage' {
+                . $PSScriptRoot\Private\Get-ISHAzureBlobObject.ps1
+                $hash=@{
+                    ContainerName=$ContainerName
+                    LocalFolder=$localPath
+                    StorageAccountName=$StorageAccountName
+                    StorageAccountKey=$StorageAccountKey
+                    Context=$Context
+                }
+
+                Get-ISHAzureBlobObject -BlobName $Path @hash | Out-Null
                 break        
             }
             'Content' {

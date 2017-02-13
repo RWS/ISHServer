@@ -76,6 +76,8 @@ $exportNames=@(
 $privateNames=@(
     "Get-ISHFTPItem"
     "Get-ISHS3Object"
+    "Get-ISHAzureFileObject"
+    "Get-ISHAzureBlobObject"
     "Test-RunningAsElevated"
 )
 
