@@ -21,8 +21,7 @@ function Initialize-ISHRegional
     
     begin 
     {
-        . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
-        Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
+
     }
 
     process
