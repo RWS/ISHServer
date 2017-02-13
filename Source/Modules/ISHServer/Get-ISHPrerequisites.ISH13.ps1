@@ -40,6 +40,22 @@ function Get-ISHPrerequisites
         [string]$SecretKey,
         [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
         [string]$SessionToken,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [string]$ShareName,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
+        [string]$ContainerName,
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
+        [string]$FolderPath,
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [string]$StorageAccountName,
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [string]$StorageAccountKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [Object]$Context,
         [Parameter(Mandatory=$true,ParameterSetName="No Download")]
         [switch]$FileNames
     )
@@ -62,6 +78,10 @@ function Get-ISHPrerequisites
         if(-not ($FolderKey.EndsWith("/")))
         {
             $FolderKey+="/"
+        }
+        if(-not ($FolderPath.EndsWith("/")))
+        {
+            $FolderPath+="/"
         }
     }
 
@@ -131,6 +151,42 @@ function Get-ISHPrerequisites
                     $keys+="$FolderKey$_"
                 }
                 Get-ISHS3Object -Key $keys @hash | Out-Null
+                break        
+            }
+            'From Azure FileStorage' {
+                . $PSScriptRoot\Private\Get-ISHAzureFileObject.ps1
+        
+                $localPath=Get-ISHServerFolderPath
+                $hash=@{
+                    ShareName=$ShareName
+                    LocalFolder=$localPath
+                    StorageAccountName=$StorageAccountName
+                    StorageAccountKey=$StorageAccountKey
+                    Context=$Context
+                }
+                $paths=@()
+                $filesToDownload | ForEach-Object {
+                    $paths+="$FolderPath$_"
+                }
+                Get-ISHAzureFileObject -Path $paths @hash | Out-Null
+                break        
+            }
+            'From Azure BlobStorage' {
+                . $PSScriptRoot\Private\Get-ISHAzureBlobObject.ps1
+        
+                $localPath=Get-ISHServerFolderPath
+                $hash=@{
+                    ContainerName=$ContainerName
+                    LocalFolder=$localPath
+                    StorageAccountName=$StorageAccountName
+                    StorageAccountKey=$StorageAccountKey
+                    Context=$Context
+                }
+                $blobs=@()
+                $filesToDownload | ForEach-Object {
+                    $blobs+="$FolderPath$_"
+                }
+                Get-ISHAzureBlobObject -BlobName $blobs @hash | Out-Null
                 break        
             }
             'No Download' {
