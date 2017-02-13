@@ -168,7 +168,7 @@ foreach($moduleName in $moduleNamesToPublish)
         $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
         
         $possition = "None"
-        $releaseNotes=foreach ($line in $changelogContent) {
+        $releaseNotes=foreach ($line in $changeLog) {
             if ($line.StartsWith("**")){
                 if($possition -eq "None"){
                     $possition="This Version"
