@@ -1,5 +1,11 @@
 **1.2**
 
+Issues:
+- GH-13: Initialize-ISHRegional should not require elevated permissions.
+
+In detail:
+- `Initialize-ISHRegional` doesn't check for elevated permissions.
+
 **1.1**
 
 Issues:
