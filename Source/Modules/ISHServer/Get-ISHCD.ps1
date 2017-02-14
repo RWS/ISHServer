@@ -56,7 +56,7 @@ function Get-ISHCD
         [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountName,
         [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [parameter(ParameterSetName="From Azure BlobStorage")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountKey,
         [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
         [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]

@@ -30,8 +30,8 @@ function Get-ISHAzureFileObject
         [string]$StorageAccountKey,
         [Parameter(Mandatory=$false)]
         [Object]$Context,
-		[Parameter(Mandatory=$false)]
-		[switch]$Force=$false
+        [Parameter(Mandatory=$false)]
+        [switch]$Force=$false
     )
     
     begin 
@@ -55,15 +55,15 @@ function Get-ISHAzureFileObject
             $localFile=Join-Path $LocalFolder ($_.Substring($_.LastIndexOf('/')+1))
             Write-Debug "path=$_"
             Write-Debug "localFile=$localFile"
-			if(-not (Test-Path $localFile) -or $Force)
-			{
-				Get-AzureStorageFileContent -ShareName $hash.ShareName -Path $_ -Destination $localFile -Force -Context $hash.Context | Out-Null
-				Write-Verbose "Downloaded $_ to $localFile"
-			}
-			else 
-			{
-				Write-Verbose "Skipped $_ already exists at $localFile"
-			}
+            if(-not (Test-Path $localFile) -or $Force)
+            {
+                Get-AzureStorageFileContent -ShareName $hash.ShareName -Path $_ -Destination $localFile -Force -Context $hash.Context | Out-Null
+                Write-Verbose "Downloaded $_ to $localFile"
+            }
+            else 
+            {
+                Write-Verbose "Skipped $_ already exists at $localFile"
+            }
             Get-Item -Path $localFile
         }
     }
