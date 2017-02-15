@@ -24,12 +24,10 @@ function Get-ISHAzureFileObject
         [string[]]$Path,
         [Parameter(Mandatory=$true)]
         [string]$LocalFolder,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$true)]
         [string]$StorageAccountName,
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory=$true)]
         [string]$StorageAccountKey,
-        [Parameter(Mandatory=$false)]
-        [Object]$Context,
         [Parameter(Mandatory=$false)]
         [switch]$Force=$false
     )
@@ -37,16 +35,9 @@ function Get-ISHAzureFileObject
     begin 
     {
         Import-Module Azure.Storage -ErrorAction Stop
-        $hash=@{
-            ShareName=$ShareName
-        }
 
-        if($Context){
-            $hash.Context=$Context
-        } else {
-            # When no context provided, create one using StorageAccountName and StorageAccountKey
-            $hash.Context=New-AzureStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
-        }
+        # Create a Context using StorageAccountName and StorageAccountKey
+        $Context=New-AzureStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
     }
 
     process
@@ -57,7 +48,7 @@ function Get-ISHAzureFileObject
             Write-Debug "localFile=$localFile"
             if(-not (Test-Path $localFile) -or $Force)
             {
-                Get-AzureStorageFileContent -ShareName $hash.ShareName -Path $_ -Destination $localFile -Force -Context $hash.Context | Out-Null
+                Get-AzureStorageFileContent -ShareName $ShareName -Path $_ -Destination $localFile -Force -Context $Context | Out-Null
                 Write-Verbose "Downloaded $_ to $localFile"
             }
             else 

@@ -47,15 +47,12 @@ function Get-ISHPrerequisites
         [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$FolderPath,
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountName,
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountKey,
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
-        [Object]$Context,
         [Parameter(Mandatory=$true,ParameterSetName="No Download")]
         [switch]$FileNames
     )
@@ -153,7 +150,6 @@ function Get-ISHPrerequisites
                     LocalFolder=$localPath
                     StorageAccountName=$StorageAccountName
                     StorageAccountKey=$StorageAccountKey
-                    Context=$Context
                 }
                 $paths=@()
                 $filesToDownload | ForEach-Object {
@@ -171,7 +167,6 @@ function Get-ISHPrerequisites
                     LocalFolder=$localPath
                     StorageAccountName=$StorageAccountName
                     StorageAccountKey=$StorageAccountKey
-                    Context=$Context
                 }
                 $blobs=@()
                 $filesToDownload | ForEach-Object {

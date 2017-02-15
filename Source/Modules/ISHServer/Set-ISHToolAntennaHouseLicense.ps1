@@ -56,9 +56,6 @@ function Set-ISHToolAntennaHouseLicense
         [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountKey,
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
-        [Object]$Context,
         [Parameter(Mandatory=$true,ParameterSetName="Content")]
         $Content
     )
@@ -120,7 +117,6 @@ function Set-ISHToolAntennaHouseLicense
                     LocalFolder=$localPath
                     StorageAccountName=$StorageAccountName
                     StorageAccountKey=$StorageAccountKey
-                    Context=$Context
                 }
 
                 Get-ISHAzureFileObject -Path $Path @hash | Out-Null
@@ -133,7 +129,6 @@ function Set-ISHToolAntennaHouseLicense
                     LocalFolder=$localPath
                     StorageAccountName=$StorageAccountName
                     StorageAccountKey=$StorageAccountKey
-                    Context=$Context
                 }
 
                 Get-ISHAzureBlobObject -BlobName $Path @hash | Out-Null

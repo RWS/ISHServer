@@ -52,15 +52,12 @@ function Get-ISHCD
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [ValidatePattern(".+\.[0-9]+\.0\.[0-9]+\.[0-9]+.*\.exe")]
         [string]$BlobName,
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountName,
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountKey,
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
-        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
-        [Object]$Context,		
         [Parameter(Mandatory=$false,ParameterSetName="From FTP")]
         [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
         [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
@@ -125,7 +122,6 @@ function Get-ISHCD
                     LocalFolder=$localPath
                     StorageAccountName=$StorageAccountName
                     StorageAccountKey=$StorageAccountKey
-                    Context=$Context
                 }
 
                 $newItem=Get-ISHAzureFileObject -Path $Path @hash
@@ -143,7 +139,6 @@ function Get-ISHCD
                     LocalFolder=$localPath
                     StorageAccountName=$StorageAccountName
                     StorageAccountKey=$StorageAccountKey
-                    Context=$Context
                 }
 
                 $newItem=Get-ISHAzureBlobObject -BlobName $BlobName @hash
