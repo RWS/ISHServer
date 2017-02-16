@@ -2,6 +2,7 @@
 
 Issues:
 - GH-13: Initialize-ISHRegional should not require elevated permissions.
+- GH-17: Initialize-ISHRegional sets incorrect registry key for 'Long Time' format.
 
 In detail:
 - `Initialize-ISHRegional` doesn't check for elevated permissions.
