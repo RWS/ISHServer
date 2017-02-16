@@ -37,7 +37,7 @@ function Initialize-ISHRegional
         Set-ItemProperty -Path "HKCU:\Control Panel\International" -Name sShortDate -Value "dd/MM/yyyy"
         Set-ItemProperty -Path "HKCU:\Control Panel\International" -Name sLongDate -Value "ddddd d MMMM yyyy"
         Set-ItemProperty -Path "HKCU:\Control Panel\International" -Name sShortTime -Value "HH:mm:ss"
-        Set-ItemProperty -Path "HKCU:\Control Panel\International" -Name sLongTime -Value "HH:mm:ss"
+        Set-ItemProperty -Path "HKCU:\Control Panel\International" -Name sTimeFormat -Value "HH:mm:ss"
         Write-Verbose "Set Formatters"
     }
     end
