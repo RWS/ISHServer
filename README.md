@@ -13,6 +13,7 @@ The module can retrieve files from the following type of sources:
 
 - FTP.
 - Amazon Web Services S3 bucket.
+- Azure file and blob storage.
 
 For each different type of credentials are required.
 
