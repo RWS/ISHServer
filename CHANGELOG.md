@@ -2,10 +2,14 @@
 
 Issues:
 - GH-13: Initialize-ISHRegional should not require elevated permissions.
+- GH-15: Azure file and blob storage support. 
 - GH-17: Initialize-ISHRegional sets incorrect registry key for 'Long Time' format.
 
 In detail:
 - `Initialize-ISHRegional` doesn't check for elevated permissions.
+- `Get-ISHPrerequisites` now supports Azure file and blob storage as source.
+- `Set-ISHToolAntennaHouseLicense` now supports Azure file and blob storage as source.
+- `Get-ISHCD` now supports Azure file and blob storage as source.
 
 **1.1**
 
