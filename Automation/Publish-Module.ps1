@@ -49,11 +49,6 @@ switch ($PSCmdlet.ParameterSetName)
     }
 }
 
-if((& "$PSScriptRoot\Test-All.ps1") -ne 0)
-{
-    Write-Warning "Tests failed. Stopping..."
-    return
-}
 $changeLogPath="$PSScriptRoot\..\CHANGELOG.md"
 $changeLog=Get-Content -Path $changeLogPath
 if($publishDebug)
