@@ -44,9 +44,7 @@ function Install-ISHWindowsFeature
             $featureNames=@(
                 #http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-47EC6977-C62C-493E-B6DA-F0A3D0003C9D
                 #"Application-Server"
-                "NET-WCF-Services45"
-		        "NET-WCF-HTTP-Activation45"
-		        "NET-WCF-TCP-PortSharing45"
+		"NET-WCF-HTTP-Activation45"
                 #http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-F0F2DB60-4C4F-4962-9FC1-AE8D2F1929FE
                 "Web-Default-Doc"
                 "Web-Dir-Browsing"

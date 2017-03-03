@@ -1,3 +1,8 @@
+**1.3**
+
+Issues:
+- GH-20: Install-ISHWindowsFeature failes withing a Docker container
+
 **1.2**
 
 Issues:
