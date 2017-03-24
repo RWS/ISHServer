@@ -18,7 +18,7 @@ function Grant-ISHUserLogOnAsService{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory=$true)]
-        [string[]] $User
+        [string] $User
     )
     
     begin 
@@ -29,50 +29,58 @@ function Grant-ISHUserLogOnAsService{
 
     process
     {
-        $tempExportInfPath=Join-Path $env:TEMP tempexport.inf
-        $tempSECEditPath=Join-Path $env:TEMP secedit.sdb
-        $tempExportInfPath=Join-Path $env:TEMP tempexport.inf
-        if(Test-Path $tempExportInfPath)
+        if(Get-Module -Name PoshPrivilege -ListAvailable)
         {
-            Write-Warning "Removing $tempExportInfPath"
-            Remove-Item -Path $tempExportInfPath -Force
-        } 
-        if(Test-Path $tempSECEditPath)
+            Write-Warning "[Experimental]PoshPrivilege module detected"
+            Add-Privilege -AccountName $User -Privilege SeServiceLogonRight
+        }
+        else
         {
-            Write-Warning "Removing $tempSECEditPath"
-            Remove-Item -Path $tempSECEditPath -Force
-        } 
-        #Get list of currently used SIDs 
-        & secedit /export /cfg $tempExportInfPath 
-        $curSIDs = Select-String $tempExportInfPath -Pattern "SeServiceLogonRight" 
-        $Sids = $curSIDs.line 
-        $sidstring = ""
-        foreach($user in $User){
-            $objUser = New-Object System.Security.Principal.NTAccount($user)
-            $strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier])
-            if(!$Sids.Contains($strSID) -and !$sids.Contains($user)){
-                $sidstring += ",*$strSID"
+            Write-Host "PoshPrivilege module not detected."
+            Add-Privilege -AccountName $User -Privilege SeServiceLogonRight
+            $tempExportInfPath=Join-Path $env:TEMP tempexport.inf
+            $tempSECEditPath=Join-Path $env:TEMP secedit.sdb
+            $tempExportInfPath=Join-Path $env:TEMP tempexport.inf
+            if(Test-Path $tempExportInfPath)
+            {
+                Write-Warning "Removing $tempExportInfPath"
+                Remove-Item -Path $tempExportInfPath -Force
+            } 
+            if(Test-Path $tempSECEditPath)
+            {
+                Write-Warning "Removing $tempSECEditPath"
+                Remove-Item -Path $tempSECEditPath -Force
+            } 
+            #Get list of currently used SIDs 
+            & secedit /export /cfg $tempExportInfPath 
+            $curSIDs = Select-String $tempExportInfPath -Pattern "SeServiceLogonRight" 
+            $Sids = $curSIDs.line 
+            $sidstring = ""
+            foreach($user in $User){
+                $objUser = New-Object System.Security.Principal.NTAccount($user)
+                $strSID = $objUser.Translate([System.Security.Principal.SecurityIdentifier])
+                if(!$Sids.Contains($strSID) -and !$sids.Contains($user)){
+                    $sidstring += ",*$strSID"
+                }
             }
-        }
-        if($sidstring){
-            $newSids = $sids + $sidstring
-            Write-Host "New Sids: $newSids"
-            $tempinf = Get-Content $tempExportInfPath
-            $tempinf = $tempinf.Replace($Sids,$newSids)
-            Add-Content -Path $tempExportInfPath -Value $tempinf
-            & secedit /import /db secedit.sdb /cfg $tempExportInfPath 
-            & secedit /configure /db secedit.sdb 
+            if($sidstring){
+                $newSids = $sids + $sidstring
+                Write-Host "New Sids: $newSids"
+                $tempinf = Get-Content $tempExportInfPath
+                $tempinf = $tempinf.Replace($Sids,$newSids)
+                Add-Content -Path $tempExportInfPath -Value $tempinf
+                & secedit /import /db secedit.sdb /cfg $tempExportInfPath 
+                & secedit /configure /db secedit.sdb 
  
-            & gpupdate /force 
-        }
-        else{
-            Write-Host "No new sids"
-        }
-
-    
+                & gpupdate /force 
+            }
+            else{
+                Write-Host "No new sids"
+            }
  
-        Remove-Item $tempSECEditPath -force -ErrorAction SilentlyContinue
-        Remove-Item $tempExportInfPath -force -ErrorAction SilentlyContinue
+            Remove-Item $tempSECEditPath -force -ErrorAction SilentlyContinue
+            Remove-Item $tempExportInfPath -force -ErrorAction SilentlyContinue
+        }
     }
 
     end
