@@ -31,13 +31,11 @@ function Grant-ISHUserLogOnAsService{
     {
         if(Get-Module -Name PoshPrivilege -ListAvailable)
         {
-            Write-Warning "[Experimental]PoshPrivilege module detected"
+            Write-Host "[Experimental] PoshPrivilege module detected. Using this preferred path for containers because it's faster."
             Add-Privilege -AccountName $User -Privilege SeServiceLogonRight
         }
         else
         {
-            Write-Host "PoshPrivilege module not detected."
-            Add-Privilege -AccountName $User -Privilege SeServiceLogonRight
             $tempExportInfPath=Join-Path $env:TEMP tempexport.inf
             $tempSECEditPath=Join-Path $env:TEMP secedit.sdb
             $tempExportInfPath=Join-Path $env:TEMP tempexport.inf
