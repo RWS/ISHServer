@@ -199,6 +199,7 @@ foreach($moduleName in $moduleNamesToPublish)
             "ReleaseNotes"= $releaseNotes -join [System.Environment]::NewLine
             "CmdletsToExport" = $exportedNames
             "FunctionsToExport" = $exportedNames
+            RequiredModules=@("PoshPrivilege")
         }
         switch ($moduleName)
         {

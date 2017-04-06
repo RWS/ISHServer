@@ -94,10 +94,6 @@ Current differences of **ISHServer.13** with **ISHServer.12**:
 
 There are not automated tests for this module, but issues are generally focused on the automation of a specific action. 
 
-# Containers
-
-It has been noticed that the `Grant-ISHUserLogOnAsService` is very slow when executed inside a container. There is an **experimental** alternative much faster path available for the same cmdlet that depends on PowerShell module [PoshPrivilege](https://www.powershellgallery.com/packages/PoshPrivilege/). To enable this path just install the module and the `Grant-ISHUserLogOnAsService` will use the `Add-Privilege` cmdlet from PoshPrivilege module. Please refer to this issue (GH-23) for more information about this experimental performance improvement.
-
 # Contribution
 
 The module is developed with the PowerShell scripting language. 

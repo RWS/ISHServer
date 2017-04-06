@@ -1,6 +1,6 @@
 **1.4**
 
--GH-23: Added new experimental path for `Grant-ISHUserLogOnAsService` with dependency to [PoshPrivilege](https://www.powershellgallery.com/packages/PoshPrivilege/).
+-GH-23: New dependency to [PoshPrivilege](https://www.powershellgallery.com/packages/PoshPrivilege/) for `Grant-ISHUserLogOnAsService`.
 
 **1.3**
 
