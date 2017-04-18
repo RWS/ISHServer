@@ -121,6 +121,11 @@ function Get-ISHPrerequisites
             $filesToDownload+="vbrun60sp6.exe"
         }
 
+        if($PSCmdlet.ParameterSetName -ne "No Download")
+        {
+            $localPath=Get-ISHServerFolderPath
+        }
+
         switch ($PSCmdlet.ParameterSetName)
         {
             'From FTP' {

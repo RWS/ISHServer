@@ -53,7 +53,7 @@ function Get-ISHAzureBlobObject
             }
             else 
             {
-                Write-Verbose "Skipped $_ already exists at $localFile"
+                Write-Warning "Skipped $_ already exists at $localFile"
             }
             Get-Item -Path $localFile
         }
