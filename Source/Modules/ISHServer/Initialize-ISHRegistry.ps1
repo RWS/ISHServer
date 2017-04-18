@@ -19,8 +19,6 @@ function Initialize-ISHRegistry
 {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory=$true)]
-        [string]$OSUser
     )
     
     begin 
