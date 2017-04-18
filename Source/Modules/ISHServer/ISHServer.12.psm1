@@ -22,6 +22,7 @@ $exportNames=@(
     "Get-ISHServerFolderPath"
     "Grant-ISHUserLogOnAsService"
     "Get-ISHCOMPlus"
+    "Get-ISHNormalizedCredential"
     #endregion
 
     #region Ports
@@ -39,7 +40,10 @@ $exportNames=@(
     "Get-ISHPrerequisites.ISH12"
     "Initialize-ISHLocale"
     "Initialize-ISHIIS"
-    "Initialize-ISHUser"
+    "Initialize-ISHUserLocalProfile"
+    "Set-ISHUserLocal"
+    "Set-ISHUserAdministrator"
+    "Initialize-ISHRegistry"
     "Initialize-ISHMSDTCSettings"
     "Initialize-ISHMSDTCTransactionTimeout"
     #endregion
