@@ -2,6 +2,7 @@
 
 Issues:
 - GH-27: Improve management of OSUser.
+- GH-12: Avoid downloading when the file is already available.
 
 In detail:
 - `Initialize-ISHUser` is **deleted** and split into `Set-ISHUserLocal`, `Set-ISHUserAdministrator`, `Initialize-ISHUserLocalProfile` and `Initialize-ISHRegistry`.
@@ -10,6 +11,7 @@ In detail:
 	- `Initialize-ISHUserLocalProfile` forces the osuser to fully initialize, including the user profile directory.
 	- `Initialize-ISHRegistry` disables registry unload.
 - `Get-ISHNormalizedCredential` normalizes the credentials so they are good with all cmdlets. This is required before using any cmdlet that accepts credentials for the osuser.
+- `Get-ISHPrerequisites` will skip downloading files that are already downloaded. Use the `-Force` parameter to force the download regardless.
 
 **1.4**
 

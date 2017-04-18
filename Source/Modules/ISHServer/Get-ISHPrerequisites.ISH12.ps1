@@ -53,6 +53,11 @@ function Get-ISHPrerequisites
         [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From FTP")]
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [switch]$Force=$false,
         [Parameter(Mandatory=$true,ParameterSetName="No Download")]
         [switch]$FileNames
     )
@@ -106,13 +111,29 @@ function Get-ISHPrerequisites
         {
             $filesToDownload+="vbrun60sp6.exe"
         }
+        if(($PSCmdlet.ParameterSetName -ne "No Download") -and (-not $Force))
+        {
+            # Skip downloading existing files
+            $localPath=Get-ISHServerFolderPath
+            $filesToDownload=$filesToDownload |Where-Object {
+                $expectedExistingPath=Join-Path -Path $localPath -ChildPath $_
+                if(Test-Path -Path $expectedExistingPath)
+                {
+                    Write-Warning "Skipping download of $_ because it already exists"
+                    $false
+                }
+                else
+                {
+                    $true
+                }
+            }
+        }
 
         switch ($PSCmdlet.ParameterSetName)
         {
             'From FTP' {
                 . $PSScriptRoot\Private\Get-ISHFTPItem.ps1
 
-                $localPath=Get-ISHServerFolderPath
                 $paths=@()
                 $filesToDownload | ForEach-Object {
                     $paths+="$FTPFolder$_"
@@ -123,7 +144,6 @@ function Get-ISHPrerequisites
             'From AWS S3' {
                 . $PSScriptRoot\Private\Get-ISHS3Object.ps1
         
-                $localPath=Get-ISHServerFolderPath
                 $hash=@{
                     BucketName=$BucketName
                     LocalFolder=$localPath
@@ -161,7 +181,6 @@ function Get-ISHPrerequisites
             'From Azure BlobStorage' {
                 . $PSScriptRoot\Private\Get-ISHAzureBlobObject.ps1
         
-                $localPath=Get-ISHServerFolderPath
                 $hash=@{
                     ContainerName=$ContainerName
                     LocalFolder=$localPath
