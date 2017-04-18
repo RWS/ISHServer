@@ -35,7 +35,9 @@ function Get-ISHS3Object
         [Parameter(Mandatory=$false)]
         [string]$SecretKey,
         [Parameter(Mandatory=$false)]
-        [string]$SessionToken
+        [string]$SessionToken,
+        [Parameter(Mandatory=$false)]
+        [switch]$Force=$false
     )
     
     begin 
@@ -68,11 +70,18 @@ function Get-ISHS3Object
     process
     {
         $Key | ForEach-Object {
-            $localFile=Join-Path $LocalFolder ($_.Substring($_.LastIndexOf('/')+1))
             Write-Debug "key=$_"
+            $localFile=Join-Path $LocalFolder ($_.Substring($_.LastIndexOf('/')+1))
             Write-Debug "localFile=$localFile"
-            Copy-S3Object -Key $_ -LocalFile $localFile @hash
-            Write-Verbose "Downloaded $_ to $localFile"
+            if(-not (Test-Path $localFile) -or $Force)
+            {
+                Copy-S3Object -Key $_ -LocalFile $localFile @hash
+                Write-Verbose "Downloaded $_ to $localFile"
+            }
+            else
+            {
+                Write-Verbose "Skipped $_ already exists at $localFile"
+            }
         }
     }
 

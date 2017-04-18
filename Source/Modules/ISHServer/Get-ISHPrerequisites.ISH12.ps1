@@ -111,23 +111,6 @@ function Get-ISHPrerequisites
         {
             $filesToDownload+="vbrun60sp6.exe"
         }
-        if(($PSCmdlet.ParameterSetName -ne "No Download") -and (-not $Force))
-        {
-            # Skip downloading existing files
-            $localPath=Get-ISHServerFolderPath
-            $filesToDownload=$filesToDownload |Where-Object {
-                $expectedExistingPath=Join-Path -Path $localPath -ChildPath $_
-                if(Test-Path -Path $expectedExistingPath)
-                {
-                    Write-Warning "Skipping download of $_ because it already exists"
-                    $false
-                }
-                else
-                {
-                    $true
-                }
-            }
-        }
 
         switch ($PSCmdlet.ParameterSetName)
         {
@@ -138,7 +121,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $paths+="$FTPFolder$_"
                 }
-                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $paths -LocalPath $localPath | Out-Null
+                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $paths -LocalPath $localPath -Force:$Force | Out-Null
                 break        
             }
             'From AWS S3' {
@@ -158,7 +141,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $keys+="$FolderKey$_"
                 }
-                Get-ISHS3Object -Key $keys @hash | Out-Null
+                Get-ISHS3Object -Key $keys @hash -Force:$Force | Out-Null
                 break        
             }
             'From Azure FileStorage' {
@@ -175,7 +158,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $paths+="$FolderPath$_"
                 }
-                Get-ISHAzureFileObject -Path $paths @hash | Out-Null
+                Get-ISHAzureFileObject -Path $paths @hash -Force:$Force | Out-Null
                 break        
             }
             'From Azure BlobStorage' {
@@ -191,7 +174,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $blobs+="$FolderPath$_"
                 }
-                Get-ISHAzureBlobObject -BlobName $blobs @hash | Out-Null
+                Get-ISHAzureBlobObject -BlobName $blobs @hash -Force:$Force | Out-Null
                 break        
             }
             'No Download' {
