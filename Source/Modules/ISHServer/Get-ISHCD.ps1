@@ -63,6 +63,11 @@ function Get-ISHCD
         [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
         [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
         [switch]$Expand=$false,
+        [Parameter(Mandatory=$false,ParameterSetName="From FTP")]
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [switch]$Force=$false,
         [Parameter(Mandatory=$true,ParameterSetName="List")]
         [switch]$ListAvailable
     )
@@ -86,7 +91,7 @@ function Get-ISHCD
             'From FTP' {
                 . $PSScriptRoot\Private\Get-ISHFTPItem.ps1
 
-                $newItem=Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $localPath
+                $newItem=Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $localPath -Force:$Force
                 if($Expand)
                 {
                     . $PSScriptRoot\Expand-ISHCD.ps1
@@ -107,7 +112,7 @@ function Get-ISHCD
                     SessionToken=$SessionToken
                 }
 
-                $newItem=Get-ISHS3Object -Key $Key @hash
+                $newItem=Get-ISHS3Object -Key $Key @hash -Force:$Force
                 if($Expand)
                 {
                     . $PSScriptRoot\Expand-ISHCD.ps1
@@ -124,7 +129,7 @@ function Get-ISHCD
                     StorageAccountKey=$StorageAccountKey
                 }
 
-                $newItem=Get-ISHAzureFileObject -Path $Path @hash
+                $newItem=Get-ISHAzureFileObject -Path $Path @hash -Force:$Force
                 if($Expand)
                 {
                     . $PSScriptRoot\Expand-ISHCD.ps1
@@ -141,7 +146,7 @@ function Get-ISHCD
                     StorageAccountKey=$StorageAccountKey
                 }
 
-                $newItem=Get-ISHAzureBlobObject -BlobName $BlobName @hash
+                $newItem=Get-ISHAzureBlobObject -BlobName $BlobName @hash -Force:$Force
                 if($Expand)
                 {
                     . $PSScriptRoot\Expand-ISHCD.ps1

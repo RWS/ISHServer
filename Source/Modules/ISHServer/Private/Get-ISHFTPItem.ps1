@@ -25,7 +25,9 @@ function Get-ISHFTPItem
         [Parameter(Mandatory=$true)]
         [string[]]$Path,
         [Parameter(Mandatory=$true)]
-        [string]$LocalPath
+        [string]$LocalPath,
+        [Parameter(Mandatory=$false)]
+        [switch]$Force=$false
     )
     
     begin 
@@ -38,10 +40,18 @@ function Get-ISHFTPItem
     {
         $Path | ForEach-Object {
             Write-Debug "Path=$_"
-            Get-FTPItem -Path $_ -LocalPath $LocalPath -Overwrite
-            Write-Verbose "Downloaded $_ to $LocalPath"
-            $filePath=Join-Path $LocalPath ($_.Substring($_.LastIndexOf('/')+1))
-            Get-Item -Path $filePath
+            $localFile=Join-Path $LocalPath ($_.Substring($_.LastIndexOf('/')+1))
+            Write-Debug "localFile=$localFile"
+            if(-not (Test-Path $localFile) -or $Force)
+            {
+                Get-FTPItem -Path $_ -LocalPath $LocalPath -Overwrite
+                Write-Verbose "Downloaded $_ to $LocalPath"
+            }
+            else
+            {
+                Write-Warning "Skipped $_ already exists at $localFile"
+            }
+            Get-Item -Path $localFile
         }
     }
 
