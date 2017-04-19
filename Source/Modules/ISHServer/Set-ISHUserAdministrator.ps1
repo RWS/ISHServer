@@ -14,7 +14,8 @@
 # limitations under the License.
 #>
 
-function Initialize-ISHUser
+
+function Set-ISHUserAdministrator
 {
     [CmdletBinding()]
     param (
@@ -38,13 +39,15 @@ function Initialize-ISHUser
         if(Get-Module "Microsoft.PowerShell.LocalAccounts" -ListAvailable)
         {
             # https://technet.microsoft.com/en-us/library/mt651690.aspx
-            if(-not (Get-LocalGroupMember -Name Administrators -Member $OSUser -ErrorAction SilentlyContinue))
+            if(-not (Get-LocalGroupMember -Name Administrators |Where-Object -Property Name -EQ $OSUser))
             {
                 Add-LocalGroupMember -Group "Administrators" -Member $OSUser
             }
+            Write-Verbose "Added $OSUser to Administrators"
         }
         else
         {
+            Write-Warning "Using net.exe commands because Microsoft.PowerShell.LocalAccounts module is not available"
             if((& net localgroup Administrators) -notcontains $OSUser)
             {
                 $netCmdArgs=@(
@@ -55,19 +58,9 @@ function Initialize-ISHUser
                 )
                 & net $netCmdArgs
             }
+            Write-Verbose "Added $OSUser to Administrators"
         }
 
-        Write-Verbose "Added $OSUser to Administrators"
-    
-        # Grant Log on as Service to the osuser
-        Write-Debug "Granting ServiceLogonRight to $OSUser"
-        Grant-ISHUserLogOnAsService -User $OSUser
-        Write-Verbose "Granted ServiceLogonRight to $OSUser"
-
-        # http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-70BAEF73-D2B4-488B-8F71-505DB8ACB244
-        Write-Debug "Disabling Force Unload of registry"
-        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name DisableForceUnload -Value $true
-        Write-Verbose "Disabled Force Unload of registry"
     }
 
     end
