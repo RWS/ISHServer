@@ -91,7 +91,7 @@ function Set-ISHToolAntennaHouseLicense
         switch ($PSCmdlet.ParameterSetName)
         {
             'From FTP' {
-                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $antennaHouseFolderPath | Out-Null
+                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $FTPPath -LocalPath $antennaHouseFolderPath -Force | Out-Null
                 break        
             }
             'From AWS S3' {
@@ -107,7 +107,7 @@ function Set-ISHToolAntennaHouseLicense
                     SessionToken=$SessionToken
                 }
 
-                Get-ISHS3Object -Key $Key @hash | Out-Null
+                Get-ISHS3Object -Key $Key @hash -Force | Out-Null
                 break        
             }
             'From Azure FileStorage' {
@@ -119,7 +119,7 @@ function Set-ISHToolAntennaHouseLicense
                     StorageAccountKey=$StorageAccountKey
                 }
 
-                Get-ISHAzureFileObject -Path $Path @hash | Out-Null
+                Get-ISHAzureFileObject -Path $Path @hash -Force | Out-Null
                 break        
             }
             'From Azure BlobStorage' {
@@ -131,7 +131,7 @@ function Set-ISHToolAntennaHouseLicense
                     StorageAccountKey=$StorageAccountKey
                 }
 
-                Get-ISHAzureBlobObject -BlobName $Path @hash | Out-Null
+                Get-ISHAzureBlobObject -BlobName $Path @hash -Force | Out-Null
                 break        
             }
             'Content' {

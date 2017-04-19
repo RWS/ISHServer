@@ -53,6 +53,11 @@ function Get-ISHPrerequisites
         [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$StorageAccountKey,
+        [Parameter(Mandatory=$false,ParameterSetName="From FTP")]
+        [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure FileStorage")]
+        [Parameter(Mandatory=$false,ParameterSetName="From Azure BlobStorage")]
+        [switch]$Force=$false,
         [Parameter(Mandatory=$true,ParameterSetName="No Download")]
         [switch]$FileNames
     )
@@ -107,23 +112,26 @@ function Get-ISHPrerequisites
             $filesToDownload+="vbrun60sp6.exe"
         }
 
+        if($PSCmdlet.ParameterSetName -ne "No Download")
+        {
+            $localPath=Get-ISHServerFolderPath
+        }
+
         switch ($PSCmdlet.ParameterSetName)
         {
             'From FTP' {
                 . $PSScriptRoot\Private\Get-ISHFTPItem.ps1
 
-                $localPath=Get-ISHServerFolderPath
                 $paths=@()
                 $filesToDownload | ForEach-Object {
                     $paths+="$FTPFolder$_"
                 }
-                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $paths -LocalPath $localPath | Out-Null
+                Get-ISHFTPItem -FTPHost $FTPHost -Credential $Credential -Path $paths -LocalPath $localPath -Force:$Force | Out-Null
                 break        
             }
             'From AWS S3' {
                 . $PSScriptRoot\Private\Get-ISHS3Object.ps1
         
-                $localPath=Get-ISHServerFolderPath
                 $hash=@{
                     BucketName=$BucketName
                     LocalFolder=$localPath
@@ -138,7 +146,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $keys+="$FolderKey$_"
                 }
-                Get-ISHS3Object -Key $keys @hash | Out-Null
+                Get-ISHS3Object -Key $keys @hash -Force:$Force | Out-Null
                 break        
             }
             'From Azure FileStorage' {
@@ -155,13 +163,12 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $paths+="$FolderPath$_"
                 }
-                Get-ISHAzureFileObject -Path $paths @hash | Out-Null
+                Get-ISHAzureFileObject -Path $paths @hash -Force:$Force | Out-Null
                 break        
             }
             'From Azure BlobStorage' {
                 . $PSScriptRoot\Private\Get-ISHAzureBlobObject.ps1
         
-                $localPath=Get-ISHServerFolderPath
                 $hash=@{
                     ContainerName=$ContainerName
                     LocalFolder=$localPath
@@ -172,7 +179,7 @@ function Get-ISHPrerequisites
                 $filesToDownload | ForEach-Object {
                     $blobs+="$FolderPath$_"
                 }
-                Get-ISHAzureBlobObject -BlobName $blobs @hash | Out-Null
+                Get-ISHAzureBlobObject -BlobName $blobs @hash -Force:$Force | Out-Null
                 break        
             }
             'No Download' {

@@ -1,10 +1,27 @@
+**1.5**
+
+Issues:
+- GH-27: Improve management of OSUser.
+- GH-12: Avoid downloading when the file is already available.
+
+In detail:
+- `Initialize-ISHUser` is **deleted** and split into `Set-ISHUserLocal`, `Set-ISHUserAdministrator`, `Initialize-ISHUserLocalProfile` and `Initialize-ISHRegistry`.
+	- `Set-ISHUserLocal` adds the osuser when necessary to the local user registry. When the user exists, it will update the password.
+	- `Set-ISHUserAdministrator` sets the osuser as the local administrator.
+	- `Initialize-ISHUserLocalProfile` forces the osuser to fully initialize, including the user profile directory.
+	- `Initialize-ISHRegistry` disables registry unload.
+- `Get-ISHNormalizedCredential` normalizes the credentials so they are good with all cmdlets. This is required before using any cmdlet that accepts credentials for the osuser.
+- `Get-ISHPrerequisites` will skip downloading files that are already downloaded. Use the `-Force` parameter to force the download regardless.
+
 **1.4**
 
--GH-23: New dependency to [PoshPrivilege](https://www.powershellgallery.com/packages/PoshPrivilege/) for `Grant-ISHUserLogOnAsService`.
+Issues:
+- GH-23: New dependency to [PoshPrivilege](https://www.powershellgallery.com/packages/PoshPrivilege/) for `Grant-ISHUserLogOnAsService`.
 
 **1.3**
 
 Issues:
+
 - GH-20: Install-ISHWindowsFeature failes withing a Docker container
 
 **1.2**
