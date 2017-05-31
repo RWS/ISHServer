@@ -2,7 +2,11 @@
 
 Issues:
 - GH-32: Set-ISHUserLocal throws error "net.exe : The user name could not be found." when the password has character "
-- GH-31: Set-ISHUserLocal cannot work with passwords longer thatn 14 characters
+- GH-31: Set-ISHUserLocal cannot work with passwords longer than 14 characters
+- GH-34: Rename Get-ISHCOMPlus to Get-ISHServerCOMPlus
+
+In detail:
+- Renamed `Get-ISHCOMPlus` to `Get-ISHServerCOMPlus`
 
 **1.5**
 

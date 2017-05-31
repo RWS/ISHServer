@@ -21,7 +21,7 @@ $exportNames=@(
     "Test-ISHServerCompliance"
     "Get-ISHServerFolderPath"
     "Grant-ISHUserLogOnAsService"
-    "Get-ISHCOMPlus"
+    "Get-ISHServerCOMPlus"
     "Get-ISHNormalizedCredential"
     #endregion
 
