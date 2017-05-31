@@ -71,7 +71,7 @@ The target path is always `C:\ISHCD\X.0.Z` where `X` is the major version and `Y
 
 For installation and maintenance reasons, the module offers a couple of general purpose cmdlets:
 
-- `Get-ISHCOMPlus` returns the status of COM+ applications. This can prove useful for troubleshooting after the product is installed.
+- `Get-ISHServerCOMPlus` returns the status of COM+ applications. This can prove useful for troubleshooting after the product is installed.
 - `Get-ISHNETInfo` returns the available .NET versions on the operating system.
 - `Get-ISHOSInfo` returns details of the operating system. 
 
