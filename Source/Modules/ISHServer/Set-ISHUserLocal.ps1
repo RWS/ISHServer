@@ -66,12 +66,12 @@ function Set-ISHUserLocal
             {
                 if(Get-LocalUser -Name $localUserName -ErrorAction SilentlyContinue)
                 {
-                    Set-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires
+                    $null=Set-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires
                     Write-Verbose "Updated $localUserName"
                 }
                 else
                 {
-                    New-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires -PasswordNeverExpires
+                    $null=New-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires -PasswordNeverExpires
                     Write-Verbose "Created $localUserName"
                 }
             }
