@@ -99,8 +99,8 @@ function Get-ISHPrerequisites
             "V6-2-M9-Windows_X64_64E.exe.iss"
             "V6-2-M9-Windows_X64_64E.exe.vcredist_x64.exe"
             "V6-2-M9-Windows_X64_64E.exe.vcredist_x86.exe"
-            "ODTwithODAC121012.zip"
-            "ODTwithODAC121012.rsp"
+            "ODTwithODAC122010.zip"
+            "ODTwithODAC122010.rsp"
 
             #Specific for 13
             "NETFramework2015_4.6_MicrosoftVisualC++Redistributable_(vc_redist.x64).exe"

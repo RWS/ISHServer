@@ -56,7 +56,7 @@ $exportNames=@(
     "Install-ISHToolJavaHelp"
     "Install-ISHToolHtmlHelp"
     "Install-ISHToolAntennaHouse"
-    "Install-ISHToolOracleODAC"
+    "Install-ISHToolOracleODAC.ISH12"
     "Install-ISHWindowsFeature"
     "Install-ISHWindowsFeatureIISWinAuth"
     "Install-ISHVisualBasicRuntime"

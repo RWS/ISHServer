@@ -89,6 +89,7 @@ Current differences of **ISHServer.13** with **ISHServer.12**:
 - **MSXML** is removed form the prerequisites list, therefore the `Install-ISHToolMSXML4` cmdlet is removed.
 - **Microsoft .NET Framework 4.6.1** is required instead of **Microsoft .NET Framework 4.5**.
 - **Visual C++ Redistributable for Visual Studio 2015** is required instead of **Visual C++ Redistributable for Visual Studio 2013**.
+- **Oracle Client - ODAC 12c2 Release 1 (12.2.0.1.0)** is required instead of **Oracle Client - ODAC 12c Release 4**.
 
 # Acknowledgements
 
