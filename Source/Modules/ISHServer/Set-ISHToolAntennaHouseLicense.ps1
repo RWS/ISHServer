@@ -71,7 +71,7 @@ function Set-ISHToolAntennaHouseLicense
     process
     {
         $antennaHouseLicenseFileName="AHFormatter.lic"
-        $antennaHouseFolderPath=Join-Path $env:ProgramFiles "Antenna House\AHFormatterV62\"
+        $antennaHouseFolderPath=Join-Path $env:ProgramFiles (Get-Variable -Name "ISHServer:AntennaHouseInstallPath" -ValueOnly)
         $antennaHouseLicensePath=Join-Path $antennaHouseFolderPath $antennaHouseLicenseFileName
         if(Test-Path $antennaHouseLicensePath)
         {

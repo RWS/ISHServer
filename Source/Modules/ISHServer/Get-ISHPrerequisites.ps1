@@ -91,25 +91,41 @@ function Get-ISHPrerequisites
     {
         $filesToDownload=@(
             #Common for 12 and 13
-            "jdk-8u60-windows-x64.exe"
-            "jre-8u60-windows-x64.exe"
-            "javahelp-2_0_05.zip"
-            "htmlhelp.zip"
-            "V6-2-M9-Windows_X64_64E.exe"
-            "V6-2-M9-Windows_X64_64E.exe.iss"
-            "V6-2-M9-Windows_X64_64E.exe.vcredist_x64.exe"
-            "V6-2-M9-Windows_X64_64E.exe.vcredist_x86.exe"
-            "ODTwithODAC121012.zip"
-            "ODTwithODAC121012.rsp"
+            Get-Variable -Name "ISHServer:JDK" -ValueOnly
+            Get-Variable -Name "ISHServer:JRE" -ValueOnly
+            Get-Variable -Name "ISHServer:JavaHelp" -ValueOnly
+            Get-Variable -Name "ISHServer:HtmlHelp" -ValueOnly
+            "$(Get-Variable -Name "ISHServer:AntennaHouse" -ValueOnly)"
+            "$(Get-Variable -Name "ISHServer:AntennaHouse" -ValueOnly).iss"
+            "$(Get-Variable -Name "ISHServer:AntennaHouse" -ValueOnly).vcredist_x64.exe"
+            "$(Get-Variable -Name "ISHServer:AntennaHouse" -ValueOnly).vcredist_x86.exe"
+            "$(Get-Variable -Name "ISHServer:Oracle" -ValueOnly).zip"
+            "$(Get-Variable -Name "ISHServer:Oracle" -ValueOnly).rsp"
 
-            #Specific for 12
-            "MSXML.40SP3.msi"
-            "NETFramework2013_4.5_MicrosoftVisualC++Redistributable_(vcredist_x64).exe"
+            Get-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -ValueOnly
         )
+
+        if($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.12")
+        {
+            $filesToDownload+=Get-Variable -Name "ISHServer:MSXML" -ValueOnly
+        }
+
         $osInfo=Get-ISHOSInfo
+
+        if($osInfo.Server -eq "2016")
+        {
+        }
+        else
+        {
+            if($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.13")
+            {
+                $filesToDownload+=Get-Variable -Name "ISHServer:NETFramework" -ValueOnly
+            }
+        }
+
         if($osInfo.IsCore)
         {
-            $filesToDownload+="vbrun60sp6.exe"
+            $filesToDownload+=Get-Variable -Name "ISHServer:VisualBasicRuntime" -ValueOnly
         }
 
         if($PSCmdlet.ParameterSetName -ne "No Download")
@@ -152,7 +168,6 @@ function Get-ISHPrerequisites
             'From Azure FileStorage' {
                 . $PSScriptRoot\Private\Get-ISHAzureFileObject.ps1
         
-                $localPath=Get-ISHServerFolderPath
                 $hash=@{
                     ShareName=$ShareName
                     LocalFolder=$localPath
@@ -169,6 +184,7 @@ function Get-ISHPrerequisites
             'From Azure BlobStorage' {
                 . $PSScriptRoot\Private\Get-ISHAzureBlobObject.ps1
         
+                $localPath=Get-ISHServerFolderPath
                 $hash=@{
                     ContainerName=$ContainerName
                     LocalFolder=$localPath

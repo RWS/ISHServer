@@ -30,13 +30,7 @@ function Get-ISHServerFolderPath
 
     process
     {
-        $moduleName=$($MyInvocation.MyCommand.Module)
-        if(-not $moduleName)
-        {
-            $moduleName="ISHServer.Debug"
-            Write-Warning "Executed the cmdlet directly. Setting module name to $moduleName"
-        }
-        $programDataPath=Join-Path $env:ProgramData $moduleName
+        $programDataPath=Join-Path $env:ProgramData ($MyInvocation.MyCommand.Module.Name)
         if(-not (Test-Path $programDataPath))
         {
             New-Item $programDataPath -ItemType Directory |Out-Null

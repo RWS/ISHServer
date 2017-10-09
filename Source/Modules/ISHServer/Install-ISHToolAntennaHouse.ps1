@@ -53,7 +53,7 @@ function Install-ISHToolAntennaHouse
     
 
     
-        $fileName="V6-2-M9-Windows_X64_64E.exe"
+        $fileName=Get-Variable -Name "ISHServer:AntennaHouse" -ValueOnly
     
         #Before installing Antenna houe we need to install the Microsoft Visual C++ 2010. Minimum version must be 10.0.40219.1
         Write-Verbose "Need to install Microsoft Visual C++ 2010 as a prerequisite"

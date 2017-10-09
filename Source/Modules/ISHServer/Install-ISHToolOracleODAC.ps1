@@ -31,7 +31,7 @@ function Install-ISHToolOracleODAC
     {
         # http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-DD65E7B5-204B-48D7-91F9-CBDCB0730B80
 
-        $baseFileName="ODTwithODAC121012"
+        $baseFileName=Get-Variable -Name "ISHServer:Oracle" -ValueOnly
         $fileName="$baseFileName.zip"
         $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
         $targetPath=Join-Path $env:TEMP "$baseFileName"
