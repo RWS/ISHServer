@@ -14,6 +14,18 @@
 # limitations under the License.
 #>
 
+Set-Variable -Name "ISHServer:JDK" -Value "jdk-8u144-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:JRE" -Value "jre-8u144-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:JavaHelp" -Value "javahelp-2_0_05.zip" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:HtmlHelp" -Value "htmlhelp.zip" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-5-R1-Windows_X64_64E.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:AntennaHouseInstallPath" -Value "Antenna House\AHFormatterV65\" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:Oracle" -Value "ODTwithODAC122010" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -Value "NETFramework2015_4.6_MicrosoftVisualC++Redistributable_(vc_redist.x64).exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:NETFramework" -Value "NETFramework2015_4.6.1.xxxxx_(NDP461-KB3102436-x86-x64-AllOS-ENU).exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:VisualBasicRuntime" -Value "vbrun60sp6.exe" -Scope "Script" -Option Constant
+#Set-Variable -Name "ISHServer:MSXML" -Value "MSXML.40SP3.msi" -Scope "Script" -Option Constant
+
 $exportNames=@(
     #region Helpers
     "Get-ISHOSInfo"
@@ -37,7 +49,7 @@ $exportNames=@(
 
     #region Global
     "Get-ISHServerFolderPath"
-    "Get-ISHPrerequisites.ISH13"
+    "Get-ISHPrerequisites"
     "Initialize-ISHLocale"
     "Initialize-ISHIIS"
     "Initialize-ISHUserLocalProfile"
@@ -47,13 +59,13 @@ $exportNames=@(
     #endregion
 
     #region Install
-    "Install-ISHToolDotNET.ISH13"
-    "Install-ISHToolVisualCPP.ISH13"
+    "Install-ISHToolDotNET"
+    "Install-ISHToolVisualCPP"
     "Install-ISHToolJAVA"
     "Install-ISHToolJavaHelp"
     "Install-ISHToolHtmlHelp"
     "Install-ISHToolAntennaHouse"
-    "Install-ISHToolOracleODAC.ISH13"
+    "Install-ISHToolOracleODAC"
     "Install-ISHWindowsFeature"
     "Install-ISHWindowsFeatureIISWinAuth"
     "Install-ISHVisualBasicRuntime"

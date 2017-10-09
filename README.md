@@ -30,10 +30,11 @@ The supported operating systems are:
 
 Because of the size of **Knowledge Center Content Manager** prerequisites they are not included in the module. 
 This makes it your responsibility to make them available to the module. 
-To find out which file names are required, execute `Get-ISHPrerequisites -FileNames` and the result should be 
+To find out which file names are required, execute `Get-ISHPrerequisites -FileNames` and the result should be per Knowledge Center version:
+
+**Knowledge Center 2016 - Content Manager 12 - ISHServer.12**
 
 ```text
-MSXML.40SP3.msi
 jdk-8u60-windows-x64.exe
 jre-8u60-windows-x64.exe
 javahelp-2_0_05.zip
@@ -44,8 +45,27 @@ V6-2-M9-Windows_X64_64E.exe.vcredist_x64.exe
 V6-2-M9-Windows_X64_64E.exe.vcredist_x86.exe
 ODTwithODAC121012.zip
 ODTwithODAC121012.rsp
+MSXML.40SP3.msi
 NETFramework2013_4.5_MicrosoftVisualC++Redistributable_(vcredist_x64).exe
 ```
+
+**Knowledge Center 2018 - Content Manager 13 - ISHServer.13**
+
+```text
+jdk-8u144-windows-x64.exe
+jre-8u144-windows-x64.exe
+javahelp-2_0_05.zip
+htmlhelp.zip
+V6-5-R1-Windows_X64_64E.exe
+V6-5-R1-Windows_X64_64E.exe.iss
+V6-5-R1-Windows_X64_64E.exe.vcredist_x64.exe
+V6-5-R1-Windows_X64_64E.exe.vcredist_x86.exe
+ODTwithODAC122010.zip
+ODTwithODAC122010.rsp
+NETFramework2015_4.6_MicrosoftVisualC++Redistributable_(vc_redist.x64).exe
+NETFramework2015_4.6.1.xxxxx_(NDP461-KB3102436-x86-x64-AllOS-ENU).exe
+```
+
 
 If you want to manually make the files available to the module then copy them to the location provided by `Get-ISHServerFolderPath`. 
 As an alternative, the `Get-ISHPrerequisites` cmdlet offers the option to download the files will take care of everything. 
@@ -66,6 +86,7 @@ ISHServer offers two cmdlets to download and expand the ISHCD. **Notice that it 
 The target path is always `C:\ISHCD\X.0.Z` where `X` is the major version and `Y` the revision. 
 - For `12.0.1` it's `C:\ISHCD\12.0.1`
 - For `12.0.3` it's `C:\ISHCD\12.0.3`
+- For `13.0.0` it's `C:\ISHCD\13.0.0`
 
 ## Maintenance
 
@@ -85,11 +106,13 @@ The goal is to reuse as much as possible the scripts developed for **ISHServer.1
 
 Current differences of **ISHServer.13** with **ISHServer.12**:
 
+- **Java** runtime and development kit for (64-bit) 1.8.0_144.
 - **MSDTC** is removed form the prerequisites list, therefore the `Initialize-ISHMSDTCSettings` and `Initialize-ISHMSDTCTransactionTimeout` cmdlets are removed.
 - **MSXML** is removed form the prerequisites list, therefore the `Install-ISHToolMSXML4` cmdlet is removed.
 - **Microsoft .NET Framework 4.6.1** is required instead of **Microsoft .NET Framework 4.5**.
 - **Visual C++ Redistributable for Visual Studio 2015** is required instead of **Visual C++ Redistributable for Visual Studio 2013**.
 - **Oracle Client - ODAC 12c2 Release 1 (12.2.0.1.0)** is required instead of **Oracle Client - ODAC 12c Release 4**.
+- **Antenna House V6.5**.
 
 # Acknowledgements
 
