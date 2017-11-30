@@ -15,59 +15,69 @@
 #>
 
 param(
-    [Parameter(Mandatory=$false,ParameterSetName="KC2016")]
-    [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
+    [Parameter(Mandatory=$false,ParameterSetName="Public")]
+    [Parameter(Mandatory=$false,ParameterSetName="Public+Internal")]
     [string]$NuGetApiKey=$null,
-    [Parameter(Mandatory=$true,ParameterSetName="KC2016+Dev")]
+    [Parameter(Mandatory=$true,ParameterSetName="Public+Internal")]
     [ValidateScript({$_ -ne "PSGallery"})]
-    [string]$DevRepository #,
-    <#
-    [Parameter(Mandatory=$true,ParameterSetName="KC2016")]
-    [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
-    [switch]$ISH12=$false,
-    [Parameter(Mandatory=$false,ParameterSetName="KC2016+Dev")]
-    [switch]$ISH13=$false
-    #>
+    [string]$DevRepository
 )
 Set-StrictMode -Version latest
 
 $moduleNamesToPublish=@()
 switch ($PSCmdlet.ParameterSetName)
 {
-    'KC2016' {
+    'Public' {
         $publishDebug=$false
         $repository="PSGallery"
         $moduleNamesToPublish+="ISHServer.12"
+        $moduleNamesToPublish+="ISHServer.13"
         break;
     }
-    'KC2016+Dev' {
+    'Public+Internal' {
         $publishDebug=$true
         $repository=$DevRepository
         $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
+        $moduleNamesToPublish+="ISHServer.14"
         break        
     }
 }
 
 $changeLogPath="$PSScriptRoot\..\CHANGELOG.md"
 $changeLog=Get-Content -Path $changeLogPath
-if($publishDebug)
-{
-    $revision=0
-    $date=(Get-Date).ToUniversalTime()
-    $build=[string](1200 * ($date.Year -2015)+$date.Month*100+$date.Day)
-    $build+=$date.ToString("HHmm")
-}
-
-
 
 foreach($moduleName in $moduleNamesToPublish)
 {
     try
     {
+        if($publishDebug)
+        {
+            switch ($moduleName)
+            {
+                'ISHServer.12' {
+                    $startYear="2014"
+                    break
+                }
+                'ISHServer.13' {
+                    $startYear="2015"
+                    break
+                }
+                'ISHServer.14' {
+                    $startYear="2017"
+                    break
+                }
+            }
+            
+            $revision=0
+            $date=(Get-Date).ToUniversalTime()
+            $build=[string](1200 * ($date.Year -$startYear)+$date.Month*100+$date.Day)
+            $build+=$date.ToString("HHmm")
+        }
+
         $progressActivity="Publish $moduleName"
         Write-Progress -Activity $progressActivity
-        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.13"))
+        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.14"))
         {
             throw "Not allowed to publish $moduleName to $repository"
         }
@@ -84,15 +94,8 @@ foreach($moduleName in $moduleNamesToPublish)
         Write-Verbose "Temporary working folder $modulePath is ready"
 
         Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*" -Destination $modulePath -Recurse
-        switch ($moduleName)
-        {
-            'ISHServer.12' {
-                Remove-Item -Path "$modulePath\ISHServer.13.psm1" -Force
-            }
-            'ISHServer.13' {
-                Remove-Item -Path "$modulePath\ISHServer.12.psm1" -Force
-            }
-        }
+        Get-ChildItem -Path $modulePath -Filter "ISHServer.*.psm1"|Where-Object -Property Name -Ne "$($moduleName).psm1"|remove-Item -Force  
+
         $psm1Path=Join-Path $modulePath "$moduleName.psm1"
         $metadataPath=Join-Path $modulePath "metadata.ps1"
         $metadataContent=Get-Content -Path $metadataPath -Raw
@@ -160,7 +163,6 @@ foreach($moduleName in $moduleNamesToPublish)
         $exportedNames=Get-Command -Module $moduleName | Select-Object -ExcludeProperty Name
         $psm1Name=$moduleName+".psm1"
         $psd1Path=Join-Path $modulePath "$moduleName.psd1"
-        $guid="c1e7cbac-9e47-4906-8281-5f16471d7ccd"
         
         $possition = "None"
         $releaseNotes=foreach ($line in $changeLog) {
@@ -191,11 +193,11 @@ foreach($moduleName in $moduleNamesToPublish)
             "CompanyName" = "SDL plc"
             "Copyright"="SDL plc. All rights reserved."
             "RootModule"=$psm1Name
-            "Description"="Prerequisite automation module for SDL Knowledge Center Content Manager 12.0.* (LiveContent Architect, Trisoft InfoShare)"
+            "Description"=""
             "ModuleVersion"=$sourceVersion
             "Path"=$psd1Path
-            "LicenseUri"='https://github.com/Sarafian/ISHServer/blob/master/LICENSE'
-            "ProjectUri"= 'https://github.com/Sarafian/ISHServer/'
+            "LicenseUri"='https://github.com/sdl/ISHServer/blob/master/LICENSE'
+            "ProjectUri"= 'https://github.com/sdl/ISHServer/'
             "ReleaseNotes"= $releaseNotes -join [System.Environment]::NewLine
             "CmdletsToExport" = $exportedNames
             "FunctionsToExport" = $exportedNames
@@ -210,6 +212,11 @@ foreach($moduleName in $moduleNamesToPublish)
             'ISHServer.13' {
                 $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 13.0.* (LiveContent Architect, Trisoft InfoShare)"
                 $hash.Guid="c73125ea-0914-4a1c-958b-05eccd6c2c29"
+                break
+            }
+            'ISHServer.14' {
+                $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 14.0.* (LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="05077a18-b95e-458c-9adc-5ad7d95aed5d"
                 break
             }
         }
