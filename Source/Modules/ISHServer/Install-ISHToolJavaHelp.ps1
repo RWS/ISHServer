@@ -30,7 +30,7 @@ function Install-ISHToolJavaHelp
     process
     {
         # http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-48FBD1F6-1492-4156-827C-30CA45FC60E9
-        $fileName="javahelp-2_0_05.zip"
+        $fileName=Get-Variable -Name "ISHServer:JavaHelp" -ValueOnly
         $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
         $targetPath="C:\JavaHelp\"
         if(Test-Path $targetPath)

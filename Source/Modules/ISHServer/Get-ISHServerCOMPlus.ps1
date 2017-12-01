@@ -14,7 +14,7 @@
 # limitations under the License.
 #>
 
-function Get-ISHCOMPlus
+function Get-ISHServerCOMPlus
 {
     [CmdletBinding()]
     Param()

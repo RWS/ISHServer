@@ -66,12 +66,12 @@ function Set-ISHUserLocal
             {
                 if(Get-LocalUser -Name $localUserName -ErrorAction SilentlyContinue)
                 {
-                    Set-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires
+                    $null=Set-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires
                     Write-Verbose "Updated $localUserName"
                 }
                 else
                 {
-                    New-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires -PasswordNeverExpires
+                    $null=New-LocalUser -Name $localUserName -Password $OsUserCredentials.Password -AccountNeverExpires -PasswordNeverExpires
                     Write-Verbose "Created $localUserName"
                 }
             }
@@ -99,14 +99,16 @@ function Set-ISHUserLocal
                     }
                 }
 
+                # Do this for when the password contains the " character
+                $normalizedOSUserPassword=$osUserPassword.Replace('"','\"')
                 if($existingUsers -contains $localUserName)
                 {
-                    & NET USER $localUserName $osUserPassword
+                    & NET USER $localUserName $normalizedOSUserPassword /Y
                     Write-Verbose "Updated $localUserName"
                 }
                 else
                 {
-                    &  NET USER $localUserName $osUserPassword /ADD
+                    &  NET USER $localUserName $normalizedOSUserPassword /ADD /Y
                     $user = [adsi]"WinNT://$env:computername/$localUserName"
                     $user.UserFlags.value = $user.UserFlags.value -bor 0x10000
                     $user.CommitChanges()    

@@ -1,3 +1,17 @@
+**1.6**
+
+Issues:
+- GH-32: Set-ISHUserLocal throws error "net.exe : The user name could not be found." when the password has character "
+- GH-31: Set-ISHUserLocal cannot work with passwords longer than 14 characters
+- GH-34: Rename Get-ISHCOMPlus to Get-ISHServerCOMPlus
+- GH-42: Make ContentManager2018 the primary artifact
+
+In detail:
+- Renamed `Get-ISHCOMPlus` to `Get-ISHServerCOMPlus`
+
+Remarks:
+- Moved links from https://github.com/Sarafian to https://github.com/sdl .
+
 **1.5**
 
 Issues:

@@ -29,7 +29,7 @@ function Install-ISHToolVisualCPP
 
     process
     {
-        $fileName="NETFramework2015_4.6_MicrosoftVisualC++Redistributable_(vc_redist.x64).exe"
+        $fileName=Get-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -ValueOnly
         $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
         $logFile=Join-Path $env:TEMP "$FileName.log"
         $arguments=@(

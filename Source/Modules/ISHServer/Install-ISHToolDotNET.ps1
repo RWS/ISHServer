@@ -37,7 +37,7 @@ function Install-ISHToolDotNET
         }
         else
         {
-            $fileName="NETFramework2015_4.6.1.xxxxx_(NDP461-KB3102436-x86-x64-AllOS-ENU).exe"
+            $fileName=Get-Variable -Name "ISHServer:NETFramework" -ValueOnly
             $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
             $logFile=Join-Path $env:TEMP "$FileName.htm"
             $arguments=@(

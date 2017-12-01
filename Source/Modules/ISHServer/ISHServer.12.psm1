@@ -14,6 +14,18 @@
 # limitations under the License.
 #>
 
+Set-Variable -Name "ISHServer:JDK" -Value "jdk-8u60-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:JRE" -Value "jre-8u60-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:JavaHelp" -Value "javahelp-2_0_05.zip" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:HtmlHelp" -Value "htmlhelp.zip" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-2-M9-Windows_X64_64E.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:AntennaHouseInstallPath" -Value "Antenna House\AHFormatterV62\" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:Oracle" -Value "ODTwithODAC121012" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -Value "NETFramework2013_4.5_MicrosoftVisualC++Redistributable_(vcredist_x64).exe" -Scope "Script" -Option Constant
+#Set-Variable -Name "ISHServer:NETFramework" -Value "jre-8u60-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:VisualBasicRuntime" -Value "vbrun60sp6.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:MSXML" -Value "MSXML.40SP3.msi" -Scope "Script" -Option Constant
+
 $exportNames=@(
     #region Helpers
     "Get-ISHOSInfo"
@@ -21,7 +33,7 @@ $exportNames=@(
     "Test-ISHServerCompliance"
     "Get-ISHServerFolderPath"
     "Grant-ISHUserLogOnAsService"
-    "Get-ISHCOMPlus"
+    "Get-ISHServerCOMPlus"
     "Get-ISHNormalizedCredential"
     #endregion
 
@@ -37,7 +49,7 @@ $exportNames=@(
 
     #region Global
     "Get-ISHServerFolderPath"
-    "Get-ISHPrerequisites.ISH12"
+    "Get-ISHPrerequisites"
     "Initialize-ISHLocale"
     "Initialize-ISHIIS"
     "Initialize-ISHUserLocalProfile"
@@ -50,8 +62,8 @@ $exportNames=@(
 
     #region Install
     "Install-ISHToolMSXML4"
-    "Install-ISHToolDotNET.ISH12"
-    "Install-ISHToolVisualCPP.ISH12"
+    "Install-ISHToolDotNET"
+    "Install-ISHToolVisualCPP"
     "Install-ISHToolJAVA"
     "Install-ISHToolJavaHelp"
     "Install-ISHToolHtmlHelp"
