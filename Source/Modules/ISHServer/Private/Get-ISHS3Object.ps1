@@ -19,7 +19,7 @@ function Get-ISHS3Object
     [CmdletBinding()]
     param(
 
-[Parameter(Mandatory=$true)]
+        [Parameter(Mandatory=$true)]
         [string]$BucketName,
         [Parameter(Mandatory=$true)]
         [string[]]$Key,
