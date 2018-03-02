@@ -18,7 +18,8 @@ function Get-ISHS3Object
 {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
+
+[Parameter(Mandatory=$true)]
         [string]$BucketName,
         [Parameter(Mandatory=$true)]
         [string[]]$Key,
@@ -81,6 +82,7 @@ function Get-ISHS3Object
             else
             {
                 Write-Warning "Skipped $_ already exists at $localFile"
+                Get-Item -Path $localFile
             }
         }
     }
