@@ -81,6 +81,7 @@ function Get-ISHS3Object
             else
             {
                 Write-Warning "Skipped $_ already exists at $localFile"
+                Get-Item -Path $localFile
             }
         }
     }
