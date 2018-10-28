@@ -16,6 +16,7 @@
 
 Set-Variable -Name "ISHServer:JDK" -Value "jdk-8u144-windows-x64.exe" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:JRE" -Value "jre-8u144-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:AdoptOpenJDK" -Value "OpenJDK11-jre_x64_windows_hotspot_11_28.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:JavaHelp" -Value "javahelp-2_0_05.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:HtmlHelp" -Value "htmlhelp.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-5-R1-Windows_X64_64E.exe" -Scope "Script" -Option Constant
@@ -62,6 +63,7 @@ $exportNames=@(
     "Install-ISHToolDotNET"
     "Install-ISHToolVisualCPP"
     "Install-ISHToolJAVA"
+    "Install-ISHToolAdoptOpenJDK"
     "Install-ISHToolJavaHelp"
     "Install-ISHToolHtmlHelp"
     "Install-ISHToolAntennaHouse"
