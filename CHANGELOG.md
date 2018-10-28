@@ -1,7 +1,7 @@
 **1.7**
 
 Issues:
-- GH-48: SAdd installaton of AdoptOpenJDK pre-requisite 
+- GH-48: SAdd installaton of AdoptOpenJDK pre-requisite
 
 **1.6**
 
