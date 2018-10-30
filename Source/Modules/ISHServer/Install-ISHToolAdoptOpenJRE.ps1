@@ -35,11 +35,13 @@ function Install-ISHToolAdoptOpenJRE
         $targetPath="C:\AdoptOpenJDK\"
         if(Test-Path $targetPath)
         {
-            Write-Warning "$fileName is already installed in $targetPath"
-            return
+            Write-Warning "$targetPath already exists"
         }
-        Write-Debug "Creating $targetPath"
-        New-Item $targetPath -ItemType Directory |Out-Null
+        else
+        {
+            Write-Debug "Creating $targetPath"
+            New-Item $targetPath -ItemType Directory |Out-Null      
+        }
         Write-Debug "Unzipping $filePath to $targetPath"
         [System.Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem')|Out-Null
         [System.IO.Compression.ZipFile]::ExtractToDirectory($filePath, $targetPath)|Out-Null
