@@ -16,7 +16,7 @@
 
 . $PSScriptRoot\Get-ISHServerFolderPath.ps1
 
-function Install-ISHToolAdoptOpenJDK
+function Install-ISHToolAdoptOpenJRE
 {
     [CmdletBinding()]
     Param()
@@ -30,7 +30,7 @@ function Install-ISHToolAdoptOpenJDK
     process
     {
         # http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-48FBD1F6-1492-4156-827C-30CA45FC60E9
-        $fileName=Get-Variable -Name "ISHServer:AdoptOpenJDK" -ValueOnly
+        $fileName=Get-Variable -Name "ISHServer:AdoptOpenJRE" -ValueOnly
         $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
         $targetPath="C:\AdoptOpenJDK\"
         if(Test-Path $targetPath)
