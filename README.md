@@ -107,7 +107,10 @@ The goal is to reuse as much as possible the scripts developed for **ISHServer.1
 - When a prerequisite is dropped, then the relative cmdlets will be also dropped. 
 - When a prerequisite version is changed, then the cmdlet's implementation will be adjusted to match the correct version of the prerequisite.
 
-No current differences of **ISHServer.14** with **ISHServer.13**.
+Current differences between **ISHServer.14** and **ISHServer.13**:
+- `Get-ISHPrerequisites`: Added download of AdoptOpenJDK/JRE 
+- Added commandlets to install the AdoptOpenJDK (`Install-ISHToolAdoptOpenJDK`) and JRE (`Install-ISHToolAdoptOpenJRE`)
+- Updated scripts to download and install .NET Framework version 4.7.2 when required instead of 4.6.1  (e.g. `Install-ISHToolDotNet`)
 
 # Acknowledgements
 

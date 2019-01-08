@@ -31,9 +31,10 @@ function Install-ISHToolDotNET
     process
     {
         $osInfo=Get-ISHOSInfo
-        if($osInfo.Version -eq "2016")
+        [Version]$NETFrameworkRequiredVersion=Get-Variable -Name "ISHServer:NETFrameworkRequiredVersion" -ValueOnly
+        if($osInfo.FullNetFrameworkVersion -ge $NETFrameworkRequiredVersion)
         {
-            Write-Verbose "Assuming .NET 4.6.2 is installed on $($osInfo.Caption)"
+            Write-Verbose "Required .NET framework version $($NETFrameworkRequiredVersion) is installed ($($osInfo.FullNetFrameworkVersion) - $($osInfo.Caption))."
         }
         else
         {
