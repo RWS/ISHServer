@@ -21,6 +21,7 @@ function Get-ISHOSInfo
     
     begin 
     {
+        . $PSScriptRoot\Get-ISHNETInfo.ps1
     }
 
     process
@@ -34,6 +35,7 @@ function Get-ISHOSInfo
             Type=$Matches["Type"]
             Caption=$caption
             IsCore=-not (Test-Path "C:\Windows\explorer.exe")
+            FullNetFrameworkVersion =  $(Get-ISHNETInfo | Where-Object { $_.PSChildName -eq "Full"} | Select-Object Product).Product
         }
         New-Object -TypeName psobject -Property $hash    
     }

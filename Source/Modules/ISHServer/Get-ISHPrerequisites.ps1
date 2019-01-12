@@ -109,7 +109,7 @@ function Get-ISHPrerequisites
         {
             $filesToDownload+=Get-Variable -Name "ISHServer:MSXML" -ValueOnly
         }
-		
+        
         if($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14")
         {
             $filesToDownload+=Get-Variable -Name "ISHServer:AdoptOpenJDK" -ValueOnly
@@ -118,12 +118,10 @@ function Get-ISHPrerequisites
 
         $osInfo=Get-ISHOSInfo
 
-        if($osInfo.Server -eq "2016")
+        if(($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.13") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14"))
         {
-        }
-        else
-        {
-            if($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.13")
+            [Version]$NETFrameworkRequiredVersion=Get-Variable -Name "ISHServer:NETFrameworkRequiredVersion" -ValueOnly
+            if($osInfo.FullNetFrameworkVersion -lt $NETFrameworkRequiredVersion)
             {
                 $filesToDownload+=Get-Variable -Name "ISHServer:NETFramework" -ValueOnly
             }

@@ -26,6 +26,7 @@ function Get-ISHNETInfo
     process
     {
         # http://stackoverflow.com/questions/3487265/powershell-script-to-return-versions-of-net-framework-on-a-machine
+        # https://docs.microsoft.com/en-us/dotnet/framework/migration-guide/versions-and-dependencies
         Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse |
         Get-ItemProperty -name Version,Release -EA 0 |
         Where { $_.PSChildName -match '^(?!S)\p{L}'} |
@@ -39,7 +40,8 @@ function Get-ISHNETInfo
                 "393295|393297" { [Version]"4.6" }
                 "394254|394271" { [Version]"4.6.1" }
                 "394802|394806" { [Version]"4.6.2" }
-                {$_ -gt 394806} { [Version]"Undocumented 4.6.2 or higher, please update script" }
+                "461808|461814" { [Version]"4.7.2" }
+                {$_ -gt 461814} { [Version]"Undocumented 4.7.2 release or a higher .NET framework version, please update this script." } # What happens when comparing with this 'Version'?
               }
             }
         }

@@ -24,7 +24,8 @@ Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-5-R1-Windows_X64_64E.exe"
 Set-Variable -Name "ISHServer:AntennaHouseInstallPath" -Value "Antenna House\AHFormatterV65\" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:Oracle" -Value "ODTwithODAC122010" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -Value "NETFramework2015_4.6_MicrosoftVisualC++Redistributable_(vc_redist.x64).exe" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:NETFramework" -Value "NETFramework2015_4.6.1.xxxxx_(NDP461-KB3102436-x86-x64-AllOS-ENU).exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:NETFrameworkRequiredVersion" -Value "4.7.2" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:NETFramework" -Value "NETFramework2017_4.7.2.xxxxx_(NDP472-KB4054530-x86-x64-AllOS-ENU).exe" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:VisualBasicRuntime" -Value "vbrun60sp6.exe" -Scope "Script" -Option Constant
 #Set-Variable -Name "ISHServer:MSXML" -Value "MSXML.40SP3.msi" -Scope "Script" -Option Constant
 
