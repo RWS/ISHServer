@@ -29,6 +29,7 @@ The supported operating systems are:
 
 - Windows Server 2012 R2.
 - Windows Server 2016.
+- Windows Server 2019 (Experimental. Tested with Hyper-V only).
 - Windows 8.1 (not tested).
 - Windows 10.
 
