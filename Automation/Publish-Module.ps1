@@ -215,7 +215,7 @@ foreach($moduleName in $moduleNamesToPublish)
                 break
             }
             'ISHServer.14' {
-                $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 14.0.* (LiveContent Architect, Trisoft InfoShare)"
+                $hash.Description="Prerequisite automation module for SDL Tridion Docs 14.0.* (SDL Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
                 $hash.Guid="05077a18-b95e-458c-9adc-5ad7d95aed5d"
                 break
             }
