@@ -114,6 +114,7 @@ function Get-ISHPrerequisites
         {
             $filesToDownload+=Get-Variable -Name "ISHServer:AdoptOpenJDK" -ValueOnly
             $filesToDownload+=Get-Variable -Name "ISHServer:AdoptOpenJRE" -ValueOnly
+            $filesToDownload+=Get-Variable -Name "ISHServer:MSOLEDBSQL" -ValueOnly
         }
 
         $osInfo=Get-ISHOSInfo
