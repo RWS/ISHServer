@@ -90,9 +90,7 @@ function Get-ISHPrerequisites
     process
     {
         $filesToDownload=@(
-            #Common for 12 and 13
-            Get-Variable -Name "ISHServer:JDK" -ValueOnly
-            Get-Variable -Name "ISHServer:JRE" -ValueOnly
+            #Common for 12, 13 and 14
             Get-Variable -Name "ISHServer:JavaHelp" -ValueOnly
             Get-Variable -Name "ISHServer:HtmlHelp" -ValueOnly
             "$(Get-Variable -Name "ISHServer:AntennaHouse" -ValueOnly)"
@@ -105,19 +103,30 @@ function Get-ISHPrerequisites
             Get-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -ValueOnly
         )
 
+        #Only for 12 and 13
+        if($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.12" -or $PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.13")
+        {
+            $filesToDownload+=Get-Variable -Name "ISHServer:JDK" -ValueOnly
+            $filesToDownload+=Get-Variable -Name "ISHServer:JRE" -ValueOnly
+        }
+
+        #Only for 12
         if($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.12")
         {
             $filesToDownload+=Get-Variable -Name "ISHServer:MSXML" -ValueOnly
         }
         
+        #Only for 14
         if($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14")
         {
             $filesToDownload+=Get-Variable -Name "ISHServer:AdoptOpenJDK" -ValueOnly
             $filesToDownload+=Get-Variable -Name "ISHServer:AdoptOpenJRE" -ValueOnly
         }
 
+        #Dependend on Operating System Information (OS Server vesion, already installed prerequisites)
         $osInfo=Get-ISHOSInfo
 
+        #Only for 13 and 14
         if(($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.13") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14"))
         {
             [Version]$NETFrameworkRequiredVersion=Get-Variable -Name "ISHServer:NETFrameworkRequiredVersion" -ValueOnly
@@ -205,7 +214,7 @@ function Get-ISHPrerequisites
             'No Download' {
                 if($FileNames)
                 {
-                    $filesToDownload
+                    $filesToDownload | Sort-Object
                 }
                 break
             }
