@@ -3,7 +3,7 @@ A PowerShell module to help automate installation of prerequisites for **SDL Tri
 
 # Available ISHServer modules
 
-# ISHServer.14
+## ISHServer.14
 
 [ISHServer.14**](https://www.powershellgallery.com/packages/ISHServer.14/) is the specific module matching the prerequisite requirements of the **Tridion Docs 14** release.
 
