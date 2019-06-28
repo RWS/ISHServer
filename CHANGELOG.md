@@ -4,6 +4,7 @@ Issues:
 - GH-48: Add installaton of AdoptOpenJDK and JRE pre-requisite
 - GH-50: Upgrade .NET Framework pre-requisite to 4.7.2 for the upcoming release of Tridion Docs 14.0.0
 - GH-52: Add support for Windows Server 2019
+- GH-55: Review/Update README, CHANGELOG, RELEASNOTES, versions, ...
 
 **1.6**
 
