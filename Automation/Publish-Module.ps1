@@ -32,7 +32,7 @@ switch ($PSCmdlet.ParameterSetName)
         $repository="PSGallery"
         $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
-		$moduleNamesToPublish+="ISHServer.14"
+        $moduleNamesToPublish+="ISHServer.14"
         break;
     }
     'Public+Internal' {
