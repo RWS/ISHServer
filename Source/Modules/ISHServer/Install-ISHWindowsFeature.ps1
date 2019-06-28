@@ -65,6 +65,8 @@ function Install-ISHWindowsFeature
             {
                 '2016' {
                 }
+                '2019' {
+                }
                 '2012 R2' {
                     $featureNames+="AS-NET-Framework"
                     #http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-B06F62DB-9D30-4C2E-8C89-C116BD8F0829
@@ -76,7 +78,7 @@ function Install-ISHWindowsFeature
                 Default {throw "Not supported operating system $($osInfo.Caption)" }
             }
         
-            # On Windows Server 2016 the following import must happen explicitly
+            # On Windows Server 2016/2019 the following import must happen explicitly
             Import-Module ServerManager
         
             Install-WindowsFeature -Name $featureNames |Out-Null

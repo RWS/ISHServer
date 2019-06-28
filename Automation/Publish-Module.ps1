@@ -1,12 +1,12 @@
 <#
 # Copyright (c) 2014 All Rights Reserved by the SDL Group.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,6 +32,7 @@ switch ($PSCmdlet.ParameterSetName)
         $repository="PSGallery"
         $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
+        $moduleNamesToPublish+="ISHServer.14"
         break;
     }
     'Public+Internal' {
@@ -40,7 +41,7 @@ switch ($PSCmdlet.ParameterSetName)
         $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
         $moduleNamesToPublish+="ISHServer.14"
-        break        
+        break
     }
 }
 
@@ -68,7 +69,7 @@ foreach($moduleName in $moduleNamesToPublish)
                     break
                 }
             }
-            
+
             $revision=0
             $date=(Get-Date).ToUniversalTime()
             $build=[string](1200 * ($date.Year -$startYear)+$date.Month*100+$date.Day)
@@ -77,7 +78,7 @@ foreach($moduleName in $moduleNamesToPublish)
 
         $progressActivity="Publish $moduleName"
         Write-Progress -Activity $progressActivity
-        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.14"))
+        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.15"))
         {
             throw "Not allowed to publish $moduleName to $repository"
         }
@@ -94,7 +95,7 @@ foreach($moduleName in $moduleNamesToPublish)
         Write-Verbose "Temporary working folder $modulePath is ready"
 
         Copy-Item -Path "$PSScriptRoot\..\Source\Modules\ISHServer\*" -Destination $modulePath -Recurse
-        Get-ChildItem -Path $modulePath -Filter "ISHServer.*.psm1"|Where-Object -Property Name -Ne "$($moduleName).psm1"|remove-Item -Force  
+        Get-ChildItem -Path $modulePath -Filter "ISHServer.*.psm1"|Where-Object -Property Name -Ne "$($moduleName).psm1"|remove-Item -Force
 
         $psm1Path=Join-Path $modulePath "$moduleName.psm1"
         $metadataPath=Join-Path $modulePath "metadata.ps1"
@@ -110,7 +111,7 @@ foreach($moduleName in $moduleNamesToPublish)
         $sourceVersion="$sourceMajor.$sourceMinor"
         if($publishDebug)
         {
-            $sourceVersion+=".$build.$revision"    
+            $sourceVersion+=".$build.$revision"
             Write-Verbose "Increased $moduleName version with build number $sourceVersion"
         }
         Write-Debug "sourceMajor=$sourceMajor"
@@ -158,12 +159,12 @@ foreach($moduleName in $moduleNamesToPublish)
 
         #region manifest
         Write-Debug "Generating manifest"
-    
-        Import-Module $psm1Path -Force 
+
+        Import-Module $psm1Path -Force
         $exportedNames=Get-Command -Module $moduleName | Select-Object -ExcludeProperty Name
         $psm1Name=$moduleName+".psm1"
         $psd1Path=Join-Path $modulePath "$moduleName.psd1"
-        
+
         $possition = "None"
         $releaseNotes=foreach ($line in $changeLog) {
             if ($line.StartsWith("**")){
@@ -185,7 +186,7 @@ foreach($moduleName in $moduleNamesToPublish)
         }
         $releaseNotes+=@(
             ""
-            "https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md"
+            "https://github.com/sdl/ISHServer/blob/master/CHANGELOG.md"
         )
 
         $hash=@{
@@ -215,13 +216,13 @@ foreach($moduleName in $moduleNamesToPublish)
                 break
             }
             'ISHServer.14' {
-                $hash.Description="Prerequisite automation module for SDL Knowledge Center Content Manager 14.0.* (LiveContent Architect, Trisoft InfoShare)"
+                $hash.Description="Prerequisite automation module for SDL Tridion Docs 14.0.* (SDL Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
                 $hash.Guid="05077a18-b95e-458c-9adc-5ad7d95aed5d"
                 break
             }
         }
 
-        New-ModuleManifest  @hash 
+        New-ModuleManifest  @hash
 
         Write-Verbose "Generated manifest"
         #endregion
