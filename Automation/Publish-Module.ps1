@@ -186,7 +186,7 @@ foreach($moduleName in $moduleNamesToPublish)
         }
         $releaseNotes+=@(
             ""
-            "https://github.com/Sarafian/ISHServer/blob/master/CHANGELOG.md"
+            "https://github.com/sdl/ISHServer/blob/master/CHANGELOG.md"
         )
 
         $hash=@{
