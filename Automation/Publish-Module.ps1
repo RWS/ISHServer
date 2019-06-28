@@ -78,7 +78,7 @@ foreach($moduleName in $moduleNamesToPublish)
 
         $progressActivity="Publish $moduleName"
         Write-Progress -Activity $progressActivity
-        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.14"))
+        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.15"))
         {
             throw "Not allowed to publish $moduleName to $repository"
         }
