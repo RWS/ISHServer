@@ -28,7 +28,7 @@ Set-Variable -Name "ISHServer:NETFrameworkRequiredVersion" -Value "4.7.2" -Scope
 Set-Variable -Name "ISHServer:NETFramework" -Value "NETFramework2017_4.7.2.xxxxx_(NDP472-KB4054530-x86-x64-AllOS-ENU).exe" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:VisualBasicRuntime" -Value "vbrun60sp6.exe" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:MSOLEDBSQLRequiredVersion" -Value "18.2.1.0" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:MSOLEDBSQL" -Value "msoledbsql_18.2.1.0_x64.msi" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:MSOLEDBSQL" -Value "msoledbsql_18.3.0.0_x64.msi" -Scope "Script" -Option Constant
 #Set-Variable -Name "ISHServer:MSXML" -Value "MSXML.40SP3.msi" -Scope "Script" -Option Constant
 
 $exportNames=@(

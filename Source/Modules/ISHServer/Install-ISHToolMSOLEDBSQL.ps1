@@ -14,41 +14,38 @@
 # limitations under the License.
 #>
 
-function Install-ISHToolMSOLEDBSQL
-{
+function Install-ISHToolMSOLEDBSQL {
     [CmdletBinding()]
     Param()
     
-    begin 
-    {
+    begin {
         . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
         Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
 
-		. $PSScriptRoot\Get-ISHServerFolderPath.ps1
+        . $PSScriptRoot\Get-ISHServerFolderPath.ps1
     }
 
-    process
-    {
-        [Version]$MSOLEDBSQLRequiredVersion=Get-Variable -Name "ISHServer:MSOLEDBSQLRequiredVersion" -ValueOnly
+    process {
+        [Version]$MSOLEDBSQLRequiredVersion = Get-Variable -Name "ISHServer:MSOLEDBSQLRequiredVersion" -ValueOnly
         
         [Version]$MSOLEDBSQLInstalledVersion = "0.0.0"
-        $MSOLEDBSQLInstalled = (New-Object system.data.oledb.oledbenumerator).GetElements() | where {($_.SOURCES_NAME -like '*MSOLEDBSQL*') -and ($_.SOURCES_NAME -notlike "*Enumerator")}
-        if ($MSOLEDBSQLInstalled) 
-        {
-            # To extend: Get installed version of MSOLEDBSQL
-            [Version]$MSOLEDBSQLInstalledVersion = "18.2.1.0"
+        $MSOLEDBSQLInstalled = (New-Object system.data.oledb.oledbenumerator).GetElements() | Where-Object { ($_.SOURCES_NAME -like '*MSOLEDBSQL*') -and ($_.SOURCES_NAME -notlike "*Enumerator") }
+        if ($MSOLEDBSQLInstalled) {
+            # Get installed version of MSOLEDBSQL
+            $MSOLEDBSQLRegistryPath = "HKLM:\Software\Microsoft\Microsoft OLE DB Driver for SQL Server"
+            if (Test-Path $MSOLEDBSQLRegistryPath) {
+                [Version]$MSOLEDBSQLInstalledVersion = (Get-ItemProperty "$MSOLEDBSQLRegistryPath\*").Version
+            }
         }
         
-        if($MSOLEDBSQLInstalledVersion -ge $MSOLEDBSQLRequiredVersion)
-        {
-            Write-Verbose "MSOLEDBSQL version $($MSOLEDBSQLRequiredVersion) is installed ($($MSOLEDBSQLInstalledVersion))."
+        if ($MSOLEDBSQLInstalledVersion -ge $MSOLEDBSQLRequiredVersion) {
+            Write-Verbose "The installed version of MSOLEDBSQL ($($MSOLEDBSQLInstalledVersion)) is higher than or equal to the minimal required version ($($MSOLEDBSQLRequiredVersion))."
         }
-        else
-        {
-            $fileName=Get-Variable -Name "ISHServer:MSOLEDBSQL" -ValueOnly
-            $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
-            $logFile=Join-Path $env:TEMP "$FileName.log"
-            $arguments=@(
+        else {
+            $fileName = Get-Variable -Name "ISHServer:MSOLEDBSQL" -ValueOnly
+            $filePath = Join-Path (Get-ISHServerFolderPath) $fileName
+            $logFile = Join-Path $env:TEMP "$FileName.log"
+            $arguments = @(
                 "/package"
                 $filePath
                 "/qn"
@@ -64,8 +61,7 @@ function Install-ISHToolMSOLEDBSQL
             Write-Warning "You must restart the server before you proceed."
         }
     }
-    end
-    {
+    end {
 
     }
 }
