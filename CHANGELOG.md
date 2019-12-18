@@ -1,3 +1,8 @@
+**Not yet released 1.8**
+
+Issues:
+- GH-54: Add support for the installation of the Microsoft OLE DB Driver for SQL Server (MSOLEDBSQL) v18.3.0.0
+
 **1.7**
 
 Issues:
