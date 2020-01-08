@@ -1,7 +1,10 @@
 **Not yet released 1.8**
 
 Issues:
-- GH-54: Add support for the installation of the Microsoft OLE DB Driver for SQL Server (MSOLEDBSQL) v18.3.0.0
+- GH-54: Add support for the installation of the Microsoft OLE DB Driver for SQL Server (MSOLEDBSQL) v18.3.0.0 (ISHServer.14)
+- GH-64: Add support for the installation of ODAC 19c Release 3 for Microsoft Windows 32-bit (ISHServer.14)
+         Installation of ODAC 12 (ODTwithODAC122010) is still the default when using Install-ISHToolOracleODAC.
+         To install ODAC 19c Release 3 (ODAC193Xcopy_32bit), you need to use Install-ISHToolOracleODACv19.
 
 **1.7**
 
