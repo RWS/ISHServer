@@ -121,6 +121,8 @@ function Get-ISHPrerequisites
         {
             $filesToDownload+=Get-Variable -Name "ISHServer:AdoptOpenJDK" -ValueOnly
             $filesToDownload+=Get-Variable -Name "ISHServer:AdoptOpenJRE" -ValueOnly
+            $filesToDownload+=Get-Variable -Name "ISHServer:MSOLEDBSQL" -ValueOnly
+            $filesToDownload+="$(Get-Variable -Name "ISHServer:Oracle19" -ValueOnly).zip"
         }
 
         #Dependend on Operating System Information (OS Server vesion, already installed prerequisites)
