@@ -41,6 +41,7 @@ switch ($PSCmdlet.ParameterSetName)
         $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
         $moduleNamesToPublish+="ISHServer.14"
+        $moduleNamesToPublish+="ISHServer.15"
         break
     }
 }
@@ -66,6 +67,10 @@ foreach($moduleName in $moduleNamesToPublish)
                 }
                 'ISHServer.14' {
                     $startYear="2017"
+                    break
+                }
+                'ISHServer.15' {
+                    $startYear="2020"
                     break
                 }
             }
@@ -218,6 +223,11 @@ foreach($moduleName in $moduleNamesToPublish)
             'ISHServer.14' {
                 $hash.Description="Prerequisite automation module for SDL Tridion Docs 14.0.* (SDL Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
                 $hash.Guid="05077a18-b95e-458c-9adc-5ad7d95aed5d"
+                break
+            }
+            'ISHServer.15' {
+                $hash.Description="Prerequisite automation module for SDL Tridion Docs 15.0.* (SDL Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="b07bbbf8-6fd9-42d4-993a-202fe917fb3b"
                 break
             }
         }
