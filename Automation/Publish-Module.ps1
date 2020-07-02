@@ -75,7 +75,6 @@ foreach($moduleName in $moduleNamesToPublish)
                 }
             }
 
-            $revision=0
             $date=(Get-Date).ToUniversalTime()
             $build=[string](1200 * ($date.Year -$startYear)+$date.Month*100+$date.Day)
             $build+=$date.ToString("HHmm")
@@ -116,7 +115,7 @@ foreach($moduleName in $moduleNamesToPublish)
         $sourceVersion="$sourceMajor.$sourceMinor"
         if($publishDebug)
         {
-            $sourceVersion+=".$build.$revision"
+            $sourceVersion+=".$build"
             Write-Verbose "Increased $moduleName version with build number $sourceVersion"
         }
         Write-Debug "sourceMajor=$sourceMajor"
