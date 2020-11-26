@@ -1,8 +1,3 @@
-**1.9**
-
-Issues:
-- GH-76: Add support for the installation of Microsoft .NET Core - Windows Server Hosting v3.1.5 (ISHServer.14)
-
 **1.8**
 
 Issues:
