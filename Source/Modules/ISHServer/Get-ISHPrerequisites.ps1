@@ -112,13 +112,17 @@ function Get-ISHPrerequisites {
             $filesToDownload += Get-Variable -Name "ISHServer:MSXML" -ValueOnly
         }
 
+        #Only for 15
+        if ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15") {
+            $filesToDownload += Get-Variable -Name "ISHServer:DotNetHosting" -ValueOnly
+        }
+
         #Only for 14 and 15
         if (($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15")) {
             $filesToDownload += Get-Variable -Name "ISHServer:AdoptOpenJDK" -ValueOnly
             $filesToDownload += Get-Variable -Name "ISHServer:AdoptOpenJRE" -ValueOnly
             $filesToDownload += Get-Variable -Name "ISHServer:MSOLEDBSQL" -ValueOnly
             $filesToDownload += "$(Get-Variable -Name "ISHServer:Oracle19" -ValueOnly).zip"
-            $filesToDownload += Get-Variable -Name "ISHServer:DotNetHosting" -ValueOnly
         }
 
         #Dependend on Operating System Information (OS Server vesion, already installed prerequisites)
