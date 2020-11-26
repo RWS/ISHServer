@@ -38,8 +38,8 @@ switch ($PSCmdlet.ParameterSetName)
     'Public+Internal' {
         $publishDebug=$true
         $repository=$DevRepository
-        #$moduleNamesToPublish+="ISHServer.12"
-        #$moduleNamesToPublish+="ISHServer.13"
+        $moduleNamesToPublish+="ISHServer.12"
+        $moduleNamesToPublish+="ISHServer.13"
         $moduleNamesToPublish+="ISHServer.14"
         $moduleNamesToPublish+="ISHServer.15"
         break
