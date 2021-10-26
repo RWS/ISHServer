@@ -2,6 +2,7 @@
 
 Issues:	
 - GH-71: Add support for the installation of Microsoft .NET Core - Windows Server Hosting v3.1.5 (ISHServer.15)
+- GH-84: Add support for the installation of Eclipse Temurin Open JDK 17+35 (ISHServer.15)
 
 **1.8**
 
