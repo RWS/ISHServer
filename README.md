@@ -1,5 +1,5 @@
 # ISHServer
-A PowerShell module to help automate installation of prerequisites for **SDL Tridion Docs** (SDL Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare).
+A PowerShell module to help automate installation of prerequisites for **Tridion Docs** (Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare).
 
 # Available ISHServer modules
 
@@ -102,7 +102,7 @@ As an alternative, the `Get-ISHPrerequisites` cmdlet offers the option to downlo
 ## Installing and configuring
 
 Once the files are available on the server, you can start the installation of the prerequisites and their configuration using the rest of the cmdlets.
-The module is structured in manner that represents the steps described in the product's [documentation](http://docs.sdl.com/) (section SDL Tridion Docs).
+The module is structured in manner that represents the steps described in the product's [documentation](http://docs.sdl.com/) (section Tridion Docs).
 Understanding the prerequisites and how to configure them will be helpful but it is not a requirement.
 An example of how to use the sequence of the installation and configuration is available in [ISHBootstrap](https://github.com/sdl/ISHBootstrap).
 
