@@ -113,6 +113,7 @@ function Get-ISHPrerequisites {
         }
 
         #Only for 14
+
         if ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14") {
             $filesToDownload += Get-Variable -Name "ISHServer:AdoptOpenJDK" -ValueOnly
             $filesToDownload += Get-Variable -Name "ISHServer:AdoptOpenJRE" -ValueOnly
