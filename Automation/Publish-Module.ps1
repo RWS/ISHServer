@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2014 All Rights Reserved by the SDL Group.
+# Copyright (c) 2021 All Rights Reserved by the RWS Group.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ switch ($PSCmdlet.ParameterSetName)
         $moduleNamesToPublish+="ISHServer.12"
         $moduleNamesToPublish+="ISHServer.13"
         $moduleNamesToPublish+="ISHServer.14"
+        $moduleNamesToPublish+="ISHServer.15"
         break
     }
 }
@@ -68,9 +69,12 @@ foreach($moduleName in $moduleNamesToPublish)
                     $startYear="2017"
                     break
                 }
+                'ISHServer.15' {
+                    $startYear="2020"
+                    break
+                }
             }
 
-            $revision=0
             $date=(Get-Date).ToUniversalTime()
             $build=[string](1200 * ($date.Year -$startYear)+$date.Month*100+$date.Day)
             $build+=$date.ToString("HHmm")
@@ -111,7 +115,7 @@ foreach($moduleName in $moduleNamesToPublish)
         $sourceVersion="$sourceMajor.$sourceMinor"
         if($publishDebug)
         {
-            $sourceVersion+=".$build.$revision"
+            $sourceVersion+=".$build"
             Write-Verbose "Increased $moduleName version with build number $sourceVersion"
         }
         Write-Debug "sourceMajor=$sourceMajor"
@@ -186,19 +190,19 @@ foreach($moduleName in $moduleNamesToPublish)
         }
         $releaseNotes+=@(
             ""
-            "https://github.com/sdl/ISHServer/blob/master/CHANGELOG.md"
+            "https://github.com/RWS/ISHServer/blob/master/CHANGELOG.md"
         )
 
         $hash=@{
-            "Author"="SDL plc"
-            "CompanyName" = "SDL plc"
-            "Copyright"="SDL plc. All rights reserved."
+            "Author"="RWS plc"
+            "CompanyName"="RWS plc"
+            "Copyright"="RWS plc. All rights reserved."
             "RootModule"=$psm1Name
             "Description"=""
             "ModuleVersion"=$sourceVersion
             "Path"=$psd1Path
-            "LicenseUri"='https://github.com/sdl/ISHServer/blob/master/LICENSE'
-            "ProjectUri"= 'https://github.com/sdl/ISHServer/'
+            "LicenseUri"='https://github.com/RWS/ISHServer/blob/master/LICENSE'
+            "ProjectUri"= 'https://github.com/RWS/ISHServer/'
             "ReleaseNotes"= $releaseNotes -join [System.Environment]::NewLine
             "CmdletsToExport" = $exportedNames
             "FunctionsToExport" = $exportedNames
@@ -218,6 +222,11 @@ foreach($moduleName in $moduleNamesToPublish)
             'ISHServer.14' {
                 $hash.Description="Prerequisite automation module for SDL Tridion Docs 14.0.* (SDL Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
                 $hash.Guid="05077a18-b95e-458c-9adc-5ad7d95aed5d"
+                break
+            }
+            'ISHServer.15' {
+                $hash.Description="Prerequisite automation module for Tridion Docs 15.0.* (Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="b07bbbf8-6fd9-42d4-993a-202fe917fb3b"
                 break
             }
         }

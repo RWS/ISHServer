@@ -14,27 +14,35 @@
 # limitations under the License.
 #>
 
-
-function Initialize-ISHRegistry
+function Install-ISHDotNetHosting
 {
     [CmdletBinding()]
-    param (
-    )
+    Param()
     
     begin 
     {
         . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
         Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
+
+		. $PSScriptRoot\Get-ISHServerFolderPath.ps1
     }
 
     process
     {
-        # http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-70BAEF73-D2B4-488B-8F71-505DB8ACB244
-        Write-Debug "Disabling Force Unload of registry"
-        Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System" -Name DisableForceUnload -Value $true
-        Write-Verbose "Disabled Force Unload of registry"
+        $fileName=Get-Variable -Name "ISHServer:DotNetHosting" -ValueOnly
+        $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
+        $logFile=Join-Path $env:TEMP "$FileName.log"
+        $arguments=@(
+            "/install"
+            "/norestart"
+            "/quiet"
+            "/log"
+            "$logFile"
+        )
+        Write-Debug "Installing $filePath"
+        Start-Process $filePath -ArgumentList $arguments -Wait -Verb RunAs
+        Write-Verbose "Installed using $fileName"
     }
-
     end
     {
 

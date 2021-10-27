@@ -16,12 +16,12 @@
 
 . $PSScriptRoot\Get-ISHServerFolderPath.ps1
 
-function Install-ISHToolJavaHelp 
+function Install-ISHToolEclipseTemurinOpenJDK
 {
     [CmdletBinding()]
     Param()
     
-    begin 
+    begin
     {
         . $PSScriptRoot\Private\Test-RunningAsElevated.ps1
         Test-RunningAsElevated -StopCallerPSCmdlet $PSCmdlet
@@ -29,17 +29,18 @@ function Install-ISHToolJavaHelp
 
     process
     {
-        # http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-48FBD1F6-1492-4156-827C-30CA45FC60E9
-        $fileName=Get-Variable -Name "ISHServer:JavaHelp" -ValueOnly
+        $fileName=Get-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -ValueOnly
         $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
-        $targetPath="C:\JavaHelp\"
+        $targetPath="C:\EclipseTemurinOpenJDK"
         if(Test-Path $targetPath)
         {
-            Write-Warning "$fileName is already installed in $targetPath"
-            return
+            Write-Warning "$targetPath already exists"
         }
-        Write-Debug "Creating $targetPath"
-        New-Item $targetPath -ItemType Directory |Out-Null
+        else
+        {
+            Write-Debug "Creating $targetPath"
+            New-Item $targetPath -ItemType Directory |Out-Null
+        }
         Write-Debug "Unzipping $filePath to $targetPath"
         [System.Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem')|Out-Null
         [System.IO.Compression.ZipFile]::ExtractToDirectory($filePath, $targetPath)|Out-Null
