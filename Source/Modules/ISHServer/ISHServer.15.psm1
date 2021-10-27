@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2014 All Rights Reserved by the SDL Group.
+# Copyright (c) 2021 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +14,7 @@
 # limitations under the License.
 #>
 
-Set-Variable -Name "ISHServer:JDK" -Value "jdk-8u144-windows-x64.exe" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:JRE" -Value "jre-8u144-windows-x64.exe" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:AdoptOpenJDK" -Value "OpenJDK11-jdk_x64_windows_hotspot_11_28.zip" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:AdoptOpenJRE" -Value "OpenJDK11-jre_x64_windows_hotspot_11_28.zip" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -Value "OpenJDK17-jdk_x64_windows_hotspot_17_35.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:JavaHelp" -Value "javahelp-2_0_05.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:HtmlHelp" -Value "htmlhelp.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-5-R1-Windows_X64_64E.exe" -Scope "Script" -Option Constant
@@ -30,7 +27,6 @@ Set-Variable -Name "ISHServer:VisualBasicRuntime" -Value "vbrun60sp6.exe" -Scope
 Set-Variable -Name "ISHServer:MSOLEDBSQLRequiredVersion" -Value "18.2.1.0" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:MSOLEDBSQL" -Value "msoledbsql_18.3.0.0_x64.msi" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:DotNetHosting" -Value "dotnet-hosting-5.0.1-win.exe"  -Scope "Script" -Option Constant
-#Set-Variable -Name "ISHServer:MSXML" -Value "MSXML.40SP3.msi" -Scope "Script" -Option Constant
 
 $exportNames=@(
     #region Helpers
@@ -67,9 +63,7 @@ $exportNames=@(
     #region Install
     "Install-ISHToolDotNET"
     "Install-ISHToolVisualCPP"
-    "Install-ISHToolJAVA"
-    "Install-ISHToolAdoptOpenJDK"
-    "Install-ISHToolAdoptOpenJRE"
+    "Install-ISHToolEclipseTemurinOpenJDK"
     "Install-ISHToolJavaHelp"
     "Install-ISHToolHtmlHelp"
     "Install-ISHToolAntennaHouse"
