@@ -17,7 +17,7 @@
 $repositoryPath=Resolve-Path "$PSScriptRoot\..\.."
 $modulePath=Resolve-Path "$repositoryPath\Tools\Modules"
 
-Import-Module "$modulePath\SDLDevTools" -Force
+Import-Module "$modulePath\SDLDevTools\0.3\SDLDevTools.psm1" -Force
 
 $reportToValidate=@()
 Test-SDLOpenSourceHeader -ExcludeFolder ".git" -FolderPath $repositoryPath -PassThru | ForEach-Object {
