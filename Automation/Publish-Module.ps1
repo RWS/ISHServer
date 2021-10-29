@@ -30,16 +30,12 @@ switch ($PSCmdlet.ParameterSetName)
     'Public' {
         $publishDebug=$false
         $repository="PSGallery"
-        $moduleNamesToPublish+="ISHServer.12"
-        $moduleNamesToPublish+="ISHServer.13"
         $moduleNamesToPublish+="ISHServer.14"
         break;
     }
     'Public+Internal' {
         $publishDebug=$true
         $repository=$DevRepository
-        $moduleNamesToPublish+="ISHServer.12"
-        $moduleNamesToPublish+="ISHServer.13"
         $moduleNamesToPublish+="ISHServer.14"
         $moduleNamesToPublish+="ISHServer.15"
         break
@@ -133,7 +129,7 @@ foreach($moduleName in $moduleNamesToPublish)
 
             if((-not $publishDebug) -and $repositoryModule)
             {
-                $publishedVersion=$repositoryModule.Version
+                [version] $publishedVersion=$repositoryModule.Version
                 $publishedMajor=$publishedVersion.Major
                 $publishedMinor=$publishedVersion.Minor
 
@@ -194,8 +190,8 @@ foreach($moduleName in $moduleNamesToPublish)
         )
 
         $hash=@{
-            "Author"="RWS plc"
-            "CompanyName"="RWS plc"
+            "Author"="SDL plc"
+            "CompanyName"="SDL plc"
             "Copyright"="RWS plc. All rights reserved."
             "RootModule"=$psm1Name
             "Description"=""
@@ -231,7 +227,7 @@ foreach($moduleName in $moduleNamesToPublish)
             }
         }
 
-        New-ModuleManifest  @hash
+        New-ModuleManifest @hash
 
         Write-Verbose "Generated manifest"
         #endregion
