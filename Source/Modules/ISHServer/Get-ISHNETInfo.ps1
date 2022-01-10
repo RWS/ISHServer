@@ -41,7 +41,7 @@ function Get-ISHNETInfo
                 "394254|394271" { [Version]"4.6.1" }
                 "394802|394806" { [Version]"4.6.2" }
                 "461808|461814" { [Version]"4.7.2" }
-                "528449|528372|528040|528049 " { [Version]"4.8" }
+                "528449|528372|528040|528049" { [Version]"4.8" }
                 {$_ -gt 528449} { [Version]"Undocumented 4.8 release or a higher .NET framework version, please update this script." } # What happens when comparing with this 'Version'?
               }
             }
