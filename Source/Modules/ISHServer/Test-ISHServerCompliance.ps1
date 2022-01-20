@@ -29,11 +29,7 @@ function Test-ISHServerCompliance
         $osInfo=Get-ISHOSInfo
         if($osInfo.IsServer)
         {
-            $isSupported=$osInfo.Version -in '2019','2016','2012 R2'
-            if($osInfo.Version -eq '2019')
-            {
-                Write-Warning "Experimental. Hyper-V only."
-            }
+            $isSupported=$osInfo.Version -in '2020','2019','2016','2012 R2'
         }
         else
         {
