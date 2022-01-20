@@ -67,6 +67,8 @@ function Install-ISHWindowsFeature
                 }
                 '2019' {
                 }
+                '2022' {
+                }
                 '2012 R2' {
                     $featureNames+="AS-NET-Framework"
                     #http://docs.sdl.com/LiveContent/content/en-US/SDL%20Knowledge%20Center%20full%20documentation-v2/GUID-B06F62DB-9D30-4C2E-8C89-C116BD8F0829
