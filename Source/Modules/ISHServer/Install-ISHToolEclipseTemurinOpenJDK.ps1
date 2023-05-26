@@ -31,7 +31,7 @@ function Install-ISHToolEclipseTemurinOpenJDK
     {
         $fileName=Get-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -ValueOnly
         $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
-        $targetPath="C:\EclipseTemurinOpenJDK"
+        $targetPath="C:\EclipseAdoptiumOpenJDK"
         if(Test-Path $targetPath)
         {
             Write-Warning "$targetPath already exists"
