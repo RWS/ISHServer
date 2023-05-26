@@ -14,7 +14,7 @@
 # limitations under the License.
 #>
 
-Set-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -Value "OpenJDK17-jdk_x64_windows_hotspot_17_35.zip" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -Value "OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:JavaHelp" -Value "javahelp-2_0_05.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:HtmlHelp" -Value "htmlhelp.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-5-R1-Windows_X64_64E.exe" -Scope "Script" -Option Constant
