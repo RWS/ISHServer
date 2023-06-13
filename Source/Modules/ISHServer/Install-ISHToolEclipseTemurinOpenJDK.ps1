@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2021 All Rights Reserved by the RWS Group.
+# Copyright (c) 2023 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ function Install-ISHToolEclipseTemurinOpenJDK
     {
         $fileName=Get-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -ValueOnly
         $filePath=Join-Path (Get-ISHServerFolderPath) $fileName
-        $targetPath="C:\EclipseTemurinOpenJDK"
+        $targetPath="C:\EclipseAdoptiumOpenJDK"
         if(Test-Path $targetPath)
         {
             Write-Warning "$targetPath already exists"

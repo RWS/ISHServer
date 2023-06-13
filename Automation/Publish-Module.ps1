@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2021 All Rights Reserved by the RWS Group.
+# Copyright (c) 2023 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ switch ($PSCmdlet.ParameterSetName)
     'Public' {
         $publishDebug=$false
         $repository="PSGallery"
-        $moduleNamesToPublish+="ISHServer.14"
+        $moduleNamesToPublish+="ISHServer.15"
         break;
     }
     'Public+Internal' {
@@ -78,10 +78,10 @@ foreach($moduleName in $moduleNamesToPublish)
 
         $progressActivity="Publish $moduleName"
         Write-Progress -Activity $progressActivity
-        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.15"))
-        {
-            throw "Not allowed to publish $moduleName to $repository"
-        }
+#        if(($Repository -eq "PSGallery") -and ($moduleName -eq "ISHServer.15"))
+#        {
+#            throw "Not allowed to publish $moduleName to $repository"
+#       }
         $tempWorkFolderPath=Join-Path $env:TEMP "$moduleName-Publish"
         if(Test-Path $tempWorkFolderPath)
         {

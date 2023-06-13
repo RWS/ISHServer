@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2021 All Rights Reserved by the RWS Group.
+# Copyright (c) 2023 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,6 +66,8 @@ function Install-ISHWindowsFeature
                 '2016' {
                 }
                 '2019' {
+                }
+                '2022' {
                 }
                 '2012 R2' {
                     $featureNames+="AS-NET-Framework"

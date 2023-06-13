@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2021 All Rights Reserved by the RWS Group.
+# Copyright (c) 2023 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # limitations under the License.
 #>
 
-Set-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -Value "OpenJDK17-jdk_x64_windows_hotspot_17_35.zip" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -Value "OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:JavaHelp" -Value "javahelp-2_0_05.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:HtmlHelp" -Value "htmlhelp.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-5-R1-Windows_X64_64E.exe" -Scope "Script" -Option Constant
