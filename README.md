@@ -137,7 +137,7 @@ The target path is always `C:\ISHCD\X.0.Z` where `X` is the major version and `Y
 - For `13.0.0` it's `C:\ISHCD\13.0.0`
 - For `12.0.3` it's `C:\ISHCD\12.0.3`
 - For `14.0.0` it's `C:\ISHCD\14.0.0`
-- For `14.0.0` it's `C:\ISHCD\15.0.0`
+- For `15.0.0` it's `C:\ISHCD\15.0.0`
 
 ## Maintenance
 
