@@ -3,6 +3,10 @@ A PowerShell module to help automate installation of prerequisites for **SDL Tri
 
 # Available ISHServer modules
 
+## ISHServer.15
+
+[ISHServer.15**](https://www.powershellgallery.com/packages/ISHServer.15/) is the specific module matching the prerequisite requirements of the **Tridion Docs 15** release.
+
 ## ISHServer.14
 
 [ISHServer.14**](https://www.powershellgallery.com/packages/ISHServer.14/) is the specific module matching the prerequisite requirements of the **Tridion Docs 14** release.
@@ -34,6 +38,7 @@ The supported operating systems are:
 - Windows Server 2012 R2
 - Windows Server 2016
 - Windows Server 2019
+- Windows Server 2022
 - Windows 8.1 (not tested)
 - Windows 10
 
@@ -44,6 +49,22 @@ You need to execute this on the target server because operating system informati
 the list of file names (OS Server version, already installed prerequisites, ...).
 
 The complete list per Tridion Docs/Knowledge Center version:
+
+**Tridion Docs - Content Manager 15 - ISHServer.15**
+
+```text
+htmlhelp.zip
+javahelp-2_0_05.zip
+NETFramework2015_4.6_MicrosoftVisualC++Redistributable_(vc_redist.x64).exe
+ndp48-x86-x64-allos-enu.exe
+dotnet-hosting-6.0.1-win.exe
+msoledbsql_18.3.0.0_x64.msi
+OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip
+V6-5-R1-Windows_X64_64E.exe
+V6-5-R1-Windows_X64_64E.exe.iss
+V6-5-R1-Windows_X64_64E.exe.vcredist_x64.exe
+V6-5-R1-Windows_X64_64E.exe.vcredist_x86.exe
+```
 
 **Tridion Docs - Content Manager 14 - ISHServer.14**
 
@@ -116,6 +137,7 @@ The target path is always `C:\ISHCD\X.0.Z` where `X` is the major version and `Y
 - For `13.0.0` it's `C:\ISHCD\13.0.0`
 - For `12.0.3` it's `C:\ISHCD\12.0.3`
 - For `14.0.0` it's `C:\ISHCD\14.0.0`
+- For `14.0.0` it's `C:\ISHCD\15.0.0`
 
 ## Maintenance
 
