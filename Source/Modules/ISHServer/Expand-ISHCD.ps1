@@ -19,7 +19,7 @@ function Expand-ISHCD
     [CmdletBinding()]
     param(
         [Parameter(Mandatory=$true)]
-        [ValidatePattern(".+\.[0-9]+\.0\.[0-9]+\.[0-9]+.*\.exe")]
+        [ValidatePattern(".+\.[0-9]+\.[0-9]\.[0-9]+\.[0-9]+.*\.exe")]
         [string]$FileName,
         [Parameter(Mandatory=$false)]
         [switch]$Force=$false
@@ -45,7 +45,7 @@ function Expand-ISHCD
             Write-Error "$FileName doesn't exist."
             return
         }
-        $regEx=".+\.(?<Major>[0-9]+)\.0\.(?<Build>[0-9]+)\.(?<Revision>[0-9]+).+\.exe"
+        $regEx=".+\.(?<Major>[0-9]+)\.(?<Minor>[0-9]+)\.(?<Build>[0-9]+)\.(?<Revision>[0-9]+).+\.exe"
         if($FileName -notmatch $regEx)
         {
             Write-Error "$FileName has unknown format."
@@ -53,10 +53,11 @@ function Expand-ISHCD
         }
 
         $major=[int]$Matches["Major"]
+        $minor=[int]$Matches["Minor"]
         $build=[int]$Matches["Build"]
         $revision=[int]$Matches["Revision"]
         
-        $ishVersion="$($major).0.$($revision)"
+        $ishVersion="$($major).$($minor).$($revision)"
         Write-Debug "ishVersion=$ishVersion"
         $expandPath="$ishCDPath\$ishVersion"
         Write-Debug "expandPath=$expandPath"
