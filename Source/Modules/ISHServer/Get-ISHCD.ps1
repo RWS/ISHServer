@@ -23,12 +23,12 @@ function Get-ISHCD
         [Parameter(Mandatory=$true,ParameterSetName="From FTP")]
         [pscredential]$Credential,
         [Parameter(Mandatory=$true,ParameterSetName="From FTP")]
-        [ValidatePattern(".+\.[0-9]+\.0\.[0-9]+\.[0-9]+.*\.exe")]
+        [ValidatePattern(".+\.[0-9]+\.[0-9]\.[0-9]+\.[0-9]+.*\.exe")]
         [string]$FTPPath,
         [Parameter(Mandatory=$true,ParameterSetName="From AWS S3")]
         [string]$BucketName,
         [Parameter(Mandatory=$true,ParameterSetName="From AWS S3")]
-        [ValidatePattern(".+\.[0-9]+\.0\.[0-9]+\.[0-9]+.*\.exe")]
+        [ValidatePattern(".+\.[0-9]+\.[0-9]\.[0-9]+\.[0-9]+.*\.exe")]
         [string]$Key,
         [Parameter(Mandatory=$false,ParameterSetName="From AWS S3")]
         [string]$AccessKey,
@@ -45,12 +45,12 @@ function Get-ISHCD
         [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
         [string]$ShareName,
         [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
-        [ValidatePattern(".+\.[0-9]+\.0\.[0-9]+\.[0-9]+.*\.exe")]
+        [ValidatePattern(".+\.[0-9]+\.[0-9]\.[0-9]+\.[0-9]+.*\.exe")]
         [string]$Path,
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
         [string]$ContainerName,
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
-        [ValidatePattern(".+\.[0-9]+\.0\.[0-9]+\.[0-9]+.*\.exe")]
+        [ValidatePattern(".+\.[0-9]+\.[0-9]\.[0-9]+\.[0-9]+.*\.exe")]
         [string]$BlobName,
         [Parameter(Mandatory=$true,ParameterSetName="From Azure FileStorage")]
         [Parameter(Mandatory=$true,ParameterSetName="From Azure BlobStorage")]
@@ -159,21 +159,21 @@ function Get-ISHCD
                 {
                     return $path.Replace(".Test","").Replace(".Prod","")
                 }
-                $regEx=".+\.(?<Major>[0-9]+)\.0\.(?<Build>[0-9]+)\.(?<Revision>[0-9]+)(\.Test)*(\.Prod)*.+\.exe"
+                $regEx=".+\.(?<Major>[0-9]+)\.(?<Minor>[0-9]+)\.(?<Build>[0-9]+)\.(?<Revision>[0-9]+)(\.Test)*(\.Prod)*.+\.exe"
                 $availableItems=@()
                 $ishCDPath="C:\IshCD"
                 Get-ChildItem -Path $localPath -File |Where-Object -Property Name -Match $regEx|ForEach-Object {
                     $hash=[ordered]@{
                         Name=$_.Name
                         Major=[int]$Matches["Major"]
-                        Minor=0
+                        Minor=[int]$Matches["Minor"]
                         Build=[int]$Matches["Build"]
                         Revision=[int]$Matches["Revision"]
                         IsExpanded=$false
                         ExpandedPath=$null
                     }
 
-                    $ishVersion="$($hash.Major).0.$($hash.Revision)"
+                    $ishVersion="$($hash.Major).$($hash.Minor).$($hash.Revision)"
                     Write-Debug "ishVersion=$ishVersion"
                     $expandPath="$ishCDPath\$ishVersion"
                     Write-Debug "expandPath=$expandPath"
@@ -212,7 +212,7 @@ function Get-ISHCD
                     $hash=[ordered]@{
                         Name=$_.Name
                         Major=[int]$Matches["Major"]
-                        Minor=0
+                        Minor=[int]$Matches["Minor"]
                         Build=[int]$Matches["Build"]
                         Revision=[int]$Matches["Revision"]
                         IsExpanded=$true
