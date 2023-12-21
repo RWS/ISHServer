@@ -1,6 +1,12 @@
-**1.9**	
+**1.10**
 
-Issues:	
+Issues:
+- GH-95:  Upgrade Microsoft .NETFramework to version 4.8 and .NET Core Hosting Bundle to version 6.0.1 (ISHServer.15 only)
+- GH-104: Upgrade Eclipse Temurin Openjdk 17 prerequisite version to 17.0.7.7 (ISHServer.15 only)
+
+**1.9**
+
+Issues:
 - GH-71: Add support for the installation of Microsoft .NET Core - Windows Server Hosting v3.1.5 (ISHServer.15)
 - GH-84: Add support for the installation of Eclipse Temurin Open JDK 17+35 (ISHServer.15)
 
