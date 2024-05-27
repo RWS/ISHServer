@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2023 All Rights Reserved by the RWS Group.
+# Copyright (c) 2024 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ switch ($PSCmdlet.ParameterSetName)
     'Public' {
         $publishDebug=$false
         $repository="PSGallery"
-        $moduleNamesToPublish+="ISHServer.15"
+        $moduleNamesToPublish+="ISHServer.15.1"
         break;
     }
     'Public+Internal' {
