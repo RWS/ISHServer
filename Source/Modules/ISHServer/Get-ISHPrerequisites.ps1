@@ -119,14 +119,14 @@ function Get-ISHPrerequisites {
             $filesToDownload += Get-Variable -Name "ISHServer:AdoptOpenJRE" -ValueOnly
         }
 
-        #Only for 15 and 15.1
-        if (($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.1")) {
+        #Only for 15 and 15.1 and 15.2
+        if (($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.1") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.2")) {
             $filesToDownload += Get-Variable -Name "ISHServer:DotNetHosting" -ValueOnly
             $filesToDownload += Get-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -ValueOnly
         }
 
-        #Only for 14 and 15 and 15.1
-        if (($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.1")) {
+        #Only for 14 and 15 and 15.1 and 15.2
+        if (($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.1") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.2")) {
             $filesToDownload += Get-Variable -Name "ISHServer:MSOLEDBSQL" -ValueOnly
             $filesToDownload += "$(Get-Variable -Name "ISHServer:Oracle19" -ValueOnly).zip"
         }
@@ -134,8 +134,8 @@ function Get-ISHPrerequisites {
         #Dependend on Operating System Information (OS Server vesion, already installed prerequisites)
         $osInfo = Get-ISHOSInfo
 
-        #Only for 13 and 14 and 15 and 15.1
-        if (($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.13") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.1")) {
+        #Only for 13 and 14 and 15 and 15.1 and 15.2
+        if (($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.13") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.14") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.1") -or ($PSCmdlet.MyInvocation.MyCommand.Module.Name -eq "ISHServer.15.2")) {
             [Version]$NETFrameworkRequiredVersion = Get-Variable -Name "ISHServer:NETFrameworkRequiredVersion" -ValueOnly
             if ($osInfo.FullNetFrameworkVersion -lt $NETFrameworkRequiredVersion) {
                 $filesToDownload += Get-Variable -Name "ISHServer:NETFramework" -ValueOnly

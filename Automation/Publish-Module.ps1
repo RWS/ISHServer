@@ -36,9 +36,7 @@ switch ($PSCmdlet.ParameterSetName)
     'Public+Internal' {
         $publishDebug=$true
         $repository=$DevRepository
-        $moduleNamesToPublish+="ISHServer.14"
-        $moduleNamesToPublish+="ISHServer.15"
-        $moduleNamesToPublish+="ISHServer.15.1"
+        $moduleNamesToPublish+="ISHServer.15.2"
         break
     }
 }
@@ -72,6 +70,10 @@ foreach($moduleName in $moduleNamesToPublish)
                 }
                 'ISHServer.15.1' {
                     $startYear="2023"
+                    break
+                }
+                'ISHServer.15.2' {
+                    $startYear="2024"
                     break
                 }
             }
@@ -233,6 +235,11 @@ foreach($moduleName in $moduleNamesToPublish)
             'ISHServer.15.1' {
                 $hash.Description="Prerequisite automation module for Tridion Docs 15.1.* (Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
                 $hash.Guid="c18b59fa-2dfc-4f5d-b314-e599134c027c"
+                break
+            }
+            'ISHServer.15.2' {
+                $hash.Description="Prerequisite automation module for Tridion Docs 15.2.* (Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="7c75ade0-8154-42af-9699-75cc73a6ab1b"
                 break
             }
         }
