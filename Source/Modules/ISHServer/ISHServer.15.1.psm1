@@ -14,17 +14,19 @@
 # limitations under the License.
 #>
 
-Set-Variable -Name "ISHServer:JDK" -Value "jdk-8u60-windows-x64.exe" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:JRE" -Value "jre-8u60-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:EclipseTemurinOpenJDK" -Value "OpenJDK21U-jdk_x64_windows_hotspot_21.0.2_13.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:JavaHelp" -Value "javahelp-2_0_05.zip" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:HtmlHelp" -Value "htmlhelp.zip" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-2-M9-Windows_X64_64E.exe" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:AntennaHouseInstallPath" -Value "Antenna House\AHFormatterV62\" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:Oracle" -Value "ODTwithODAC121012" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -Value "NETFramework2013_4.5_MicrosoftVisualC++Redistributable_(vcredist_x64).exe" -Scope "Script" -Option Constant
-#Set-Variable -Name "ISHServer:NETFramework" -Value "jre-8u60-windows-x64.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:AntennaHouse" -Value "V6-5-R1-Windows_X64_64E.exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:AntennaHouseInstallPath" -Value "Antenna House\AHFormatterV65\" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:Oracle19" -Value "ODAC193Xcopy_32bit" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:MicrosoftVisualCPlusPlusRedistributable" -Value "NETFramework2015_4.6_MicrosoftVisualC++Redistributable_(vc_redist.x64).exe" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:NETFrameworkRequiredVersion" -Value "4.8" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:NETFramework" -Value "ndp48-x86-x64-allos-enu.exe" -Scope "Script" -Option Constant
 Set-Variable -Name "ISHServer:VisualBasicRuntime" -Value "vbrun60sp6.exe" -Scope "Script" -Option Constant
-Set-Variable -Name "ISHServer:MSXML" -Value "MSXML.40SP3.msi" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:MSOLEDBSQLRequiredVersion" -Value "18.2.1.0" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:MSOLEDBSQL" -Value "msoledbsql_18.3.0.0_x64.msi" -Scope "Script" -Option Constant
+Set-Variable -Name "ISHServer:DotNetHosting" -Value "dotnet-hosting-8.0.0-win.exe"  -Scope "Script" -Option Constant
 
 $exportNames=@(
     #region Helpers
@@ -38,7 +40,6 @@ $exportNames=@(
     #endregion
 
     #region Ports
-    "Set-ISHFirewallMSDTC"
     "Set-ISHFirewallHTTPS"
     "Set-ISHFirewallNETBIOS"
     "Set-ISHFirewallOracle"
@@ -46,6 +47,7 @@ $exportNames=@(
     "Set-ISHFirewallSMTP"
     "Set-ISHFirewallSQLServer"
     #endregion
+
 
     #region Global
     "Get-ISHServerFolderPath"
@@ -56,22 +58,22 @@ $exportNames=@(
     "Set-ISHUserLocal"
     "Set-ISHUserAdministrator"
     "Initialize-ISHRegistry"
-    "Initialize-ISHMSDTCSettings"
-    "Initialize-ISHMSDTCTransactionTimeout"
     #endregion
 
     #region Install
-    "Install-ISHToolMSXML4"
     "Install-ISHToolDotNET"
     "Install-ISHToolVisualCPP"
-    "Install-ISHToolJAVA"
+    "Install-ISHToolEclipseTemurinOpenJDK"
     "Install-ISHToolJavaHelp"
     "Install-ISHToolHtmlHelp"
     "Install-ISHToolAntennaHouse"
     "Install-ISHToolOracleODAC"
+    "Install-ISHToolOracleODACv19"
     "Install-ISHWindowsFeature"
     "Install-ISHWindowsFeatureIISWinAuth"
     "Install-ISHVisualBasicRuntime"
+    "Install-ISHToolMSOLEDBSQL"
+    "Install-ISHDotNetHosting"
     #endregion
 
     #region Regional settings
@@ -82,7 +84,7 @@ $exportNames=@(
     #region License
     "Set-ISHToolAntennaHouseLicense"
     #endregion
-	
+
 	#region CD
     "Expand-ISHCD"
     "Get-ISHCD"

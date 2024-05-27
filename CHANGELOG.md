@@ -1,3 +1,9 @@
+**1.11**
+
+Issues:
+- Upgrade .NET Core Hosting Bundle to version 6.0.1 (ISHServer.15.1 only)
+- Upgrade Eclipse Temurin Openjdk to 21 LTS (ISHServer.15.1 only)
+
 **1.10**
 
 Issues:

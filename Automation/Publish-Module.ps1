@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2023 All Rights Reserved by the RWS Group.
+# Copyright (c) 2024 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ switch ($PSCmdlet.ParameterSetName)
     'Public' {
         $publishDebug=$false
         $repository="PSGallery"
-        $moduleNamesToPublish+="ISHServer.15"
+        $moduleNamesToPublish+="ISHServer.15.1"
         break;
     }
     'Public+Internal' {
@@ -38,6 +38,7 @@ switch ($PSCmdlet.ParameterSetName)
         $repository=$DevRepository
         $moduleNamesToPublish+="ISHServer.14"
         $moduleNamesToPublish+="ISHServer.15"
+        $moduleNamesToPublish+="ISHServer.15.1"
         break
     }
 }
@@ -67,6 +68,10 @@ foreach($moduleName in $moduleNamesToPublish)
                 }
                 'ISHServer.15' {
                     $startYear="2020"
+                    break
+                }
+                'ISHServer.15.1' {
+                    $startYear="2023"
                     break
                 }
             }
@@ -223,6 +228,11 @@ foreach($moduleName in $moduleNamesToPublish)
             'ISHServer.15' {
                 $hash.Description="Prerequisite automation module for Tridion Docs 15.0.* (Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
                 $hash.Guid="b07bbbf8-6fd9-42d4-993a-202fe917fb3b"
+                break
+            }
+            'ISHServer.15.1' {
+                $hash.Description="Prerequisite automation module for Tridion Docs 15.1.* (Knowledge Center Content Manager, LiveContent Architect, Trisoft InfoShare)"
+                $hash.Guid="c18b59fa-2dfc-4f5d-b314-e599134c027c"
                 break
             }
         }
