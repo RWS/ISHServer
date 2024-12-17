@@ -42,7 +42,7 @@ function Get-ISHS3Object
     
     begin 
     {
-        Import-Module AWSPowerShell -ErrorAction Stop
+        Import-Module AWS.Tools.S3 -ErrorAction Stop
         $hash=@{
             BucketName=$BucketName
         }
