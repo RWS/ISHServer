@@ -1,7 +1,13 @@
+**1.12**
+
+Issues:
+- Use AWS.Tools.S3 module instead of AWSPowerShell module
+- New ISHServer.15.2
+  
 **1.11**
 
 Issues:
-- Upgrade .NET Core Hosting Bundle to version 6.0.1 (ISHServer.15.1 only)
+- Upgrade .NET Core Hosting Bundle to version 8.0.0 (ISHServer.15.1 only)
 - Upgrade Eclipse Temurin Openjdk to 21 LTS (ISHServer.15.1 only)
 
 **1.10**
