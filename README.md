@@ -3,6 +3,10 @@ A PowerShell module to help automate installation of prerequisites for **Tridion
 
 # Available ISHServer modules
 
+## ISHServer.15.3
+
+[ISHServer.15.3**](https://www.powershellgallery.com/packages/ISHServer.15.3/) is the specific module matching the prerequisite requirements of the **Tridion Docs 15.3** release.
+
 ## ISHServer.15.2
 
 [ISHServer.15.2**](https://www.powershellgallery.com/packages/ISHServer.15.2/) is the specific module matching the prerequisite requirements of the **Tridion Docs 15.2** release.

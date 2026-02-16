@@ -1,5 +1,5 @@
 <#
-# Copyright (c) 2025 All Rights Reserved by the RWS Group.
+# Copyright (c) 2026 All Rights Reserved by the RWS Group.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,7 +33,12 @@ function Install-ISHToolMSOLEDBSQL {
         if ($MSOLEDBSQLInstalled) {
             # Get installed version of MSOLEDBSQL
             $MSOLEDBSQLRegistryPath = "HKLM:\Software\Microsoft\Microsoft OLE DB Driver for SQL Server"
-            if (Test-Path $MSOLEDBSQLRegistryPath) {
+            $MSOLEDBSQL19RegistryPath = "HKLM:\Software\Microsoft\Microsoft OLE DB Driver 19 for SQL Server"
+
+            if (Test-Path $MSOLEDBSQL19RegistryPath) {
+                [Version]$MSOLEDBSQLInstalledVersion = (Get-ItemProperty "$MSOLEDBSQL19RegistryPath\*").Version
+            }
+            elseif (Test-Path $MSOLEDBSQLRegistryPath) {
                 [Version]$MSOLEDBSQLInstalledVersion = (Get-ItemProperty "$MSOLEDBSQLRegistryPath\*").Version
             }
         }
