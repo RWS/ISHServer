@@ -1,3 +1,10 @@
+**1.13**
+
+Issues:
+- New ISHServer.15.3
+- Upgrade .NET Core Hosting Bundle to version 10.0.3 (ISHServer.15.3 only)
+- Upgrade Eclipse Temurin Openjdk to 25 LTS (ISHServer.15.3 only)
+ 
 **1.12**
 
 Issues:
